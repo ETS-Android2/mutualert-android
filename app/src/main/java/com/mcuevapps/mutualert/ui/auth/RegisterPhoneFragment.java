@@ -12,11 +12,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.mcuevapps.mutualert.R;
+import com.mcuevapps.mutualert.common.Constantes;
 import com.mcuevapps.mutualert.common.DesignService;
 import com.mcuevapps.mutualert.common.InputFilterMinMax;
 import com.mcuevapps.mutualert.common.MyApp;
+import com.mcuevapps.mutualert.common.ToastService;
+import com.mcuevapps.mutualert.retrofit.MutuAlertClient;
+import com.mcuevapps.mutualert.retrofit.MutuAlertService;
+import com.mcuevapps.mutualert.retrofit.request.RequestUserAccountExist;
+import com.mcuevapps.mutualert.retrofit.response.ResponseSuccessBoolean;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class RegisterPhoneFragment extends Fragment implements View.OnClickListener, TextWatcher {
 
@@ -30,18 +41,27 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
     private Button buttonContinue;
 
     private DesignService designService;
+    private MutuAlertClient mutuAlertClient;
+    private MutuAlertService mutuAlertService;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_register_phone, container, false);
+
         Bundle arguments = getArguments();
         if(arguments!=null) {
             isNewUser = arguments.getBoolean("isNewUser");
         }
 
+        retrofitInit();
         initUI();
         return view;
+    }
+
+    private void retrofitInit() {
+        mutuAlertClient = MutuAlertClient.getInstance();
+        mutuAlertService = mutuAlertClient.getMutuAlertService();
     }
 
     private void initUI() {
@@ -62,16 +82,38 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
 
         switch (id) {
             case R.id.buttonContinue:
-                goToCode();
+                existUser();
                 break;
         }
     }
 
-    private void goToCode() {
-        String phone = editTextPhone.getText().toString();
+    private void existUser() {
+        RequestUserAccountExist requestUserAccountExist = new RequestUserAccountExist(editTextPhone.getText().toString());
+        Call<ResponseSuccessBoolean> call = mutuAlertService.exist(requestUserAccountExist);
+        call.enqueue(new Callback<ResponseSuccessBoolean>() {
+            @Override
+            public void onResponse(Call<ResponseSuccessBoolean> call, Response<ResponseSuccessBoolean> response) {
+                if( response.isSuccessful() ){
+                    if( response.body().getData()!=isNewUser ) {
+                        goToCode();
+                    } else {
+                        Toast.makeText(MyApp.getContext(), (isNewUser ? getString(R.string.phone_exist) : getString(R.string.phone_not_exist)), Toast.LENGTH_SHORT).show();
+                    }
+                } else {
+                    ToastService.showErrorResponse(response.errorBody());
+                }
+            }
 
+            @Override
+            public void onFailure(Call<ResponseSuccessBoolean> call, Throwable t) {
+                Toast.makeText(MyApp.getContext(), getString(R.string.error_network), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void goToCode() {
         Bundle args = new Bundle();
-        args.putString("phone", phone);
+        args.putString("phone", editTextPhone.getText().toString());
         args.putBoolean("isNewUser", isNewUser);
 
         Fragment fragment = new RegisterCodeFragment();
@@ -89,11 +131,10 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
 
     @Override
     public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-        if( charSequence.length()==9 ) {
-            designService.ButtonDefaultEnable(buttonContinue);
-        }
-        else {
+        if( charSequence.length() != Constantes.PHONE_LENGTH ) {
             designService.ButtonDefaultDisable(buttonContinue);
+        } else {
+            designService.ButtonDefaultEnable(buttonContinue);
         }
     }
 

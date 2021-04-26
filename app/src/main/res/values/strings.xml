@@ -7,6 +7,7 @@
     <string name="forgot_password">Olvidastes tu contraseña?</string>
     <string name="verify_your_number">Verifica tu teléfono</string>
     <string name="verify_your_number_content">Se le enviará un codigo por SMS</string>
+    <string name="phone_code">+51</string>
     <string name="continue_str">Continuar</string>
     <string name="enter_code_here">Ingresa el código aquí</string>
     <string name="verify_your_code_content">Le hemos enviado un código de acceso por SMS para la verificación del número de teléfono móvil</string>
@@ -20,4 +21,10 @@
     <string name="already_member">¿Ya eres miembro? Iniciar Sesión</string>
     <string name="dashboard">Dashboard</string>
     <string name="contacts">Contactos</string>
+    <string name="phone_exist">El teléfono ya está registrado, intente recuperar la contraseña</string>
+    <string name="phone_not_exist">El teléfono no se encuentra registrado</string>
+    <string name="error_network">Error de red. Vuelve a intentarlo más tarde</string>
+    <string name="error_response">Algo fue mal con los datos enviados</string>
+    <string name="code_incorrect">Código ingresado es incorrecto</string>
+
 </resources>

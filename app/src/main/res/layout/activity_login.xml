@@ -134,7 +134,7 @@
                     android:textAllCaps="false"
                     android:textSize="@dimen/font_title_size"
                     android:theme="@style/PSButton.LightGreenA100"
-                    app:backgroundTint="@null"
+                    app:backgroundTint="@color/colorAccent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/cardView" />
