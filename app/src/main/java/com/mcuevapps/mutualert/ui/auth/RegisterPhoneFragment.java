@@ -72,7 +72,7 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
         editTextPhone.addTextChangedListener(this);
 
         buttonContinue = view.findViewById(R.id.buttonContinue);
-        designService.ButtonDefaultDisable(buttonContinue);
+        designService.ButtonPrimaryDisable(buttonContinue);
         buttonContinue.setOnClickListener(this);
     }
 
@@ -132,9 +132,9 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
     @Override
     public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
         if( charSequence.length() != Constantes.PHONE_LENGTH ) {
-            designService.ButtonDefaultDisable(buttonContinue);
+            designService.ButtonPrimaryDisable(buttonContinue);
         } else {
-            designService.ButtonDefaultEnable(buttonContinue);
+            designService.ButtonPrimaryEnable(buttonContinue);
         }
     }
 

@@ -16,21 +16,39 @@ public class DesignService {
         this.context = context;
     }
 
-    public void ButtonDefaultEnable(Button button){
+    public void ButtonPrimaryEnable(Button button){
         Drawable drawable = context.getResources().getDrawable(R.drawable.button_dialog_primary_background);
         button.setBackground(drawable);
         button.setEnabled(true);
     }
 
-    public void ButtonDefaultDisable(Button button){
+    public void ButtonPrimaryDisable(Button button){
         Drawable drawable = context.getResources().getDrawable(R.drawable.button_dialog_disable_background);
         button.setBackground(drawable);
         button.setEnabled(false);
     }
 
-    public void ButtonSecondEnable(Button button){
+    public void ButtonSecondaryEnable(Button button){
+        Drawable drawable = context.getResources().getDrawable(R.drawable.button_dialog_secondary_background);
+        button.setBackground(drawable);
+        button.setEnabled(true);
+    }
+
+    public void ButtonSecondaryDisable(Button button){
+        Drawable drawable = context.getResources().getDrawable(R.drawable.button_secondary_disable_background);
+        button.setBackground(drawable);
+        button.setEnabled(false);
+    }
+
+    public void ButtonRaisedEnable(Button button){
         Drawable drawable = context.getResources().getDrawable(R.drawable.button_round_white_background);
         button.setBackground(drawable);
         button.setEnabled(true);
+    }
+
+    public void ButtonRaisedDisable(Button button){
+        Drawable drawable = context.getResources().getDrawable(R.drawable.button_raised_disable_background);
+        button.setBackground(drawable);
+        button.setEnabled(false);
     }
 }

@@ -133,8 +133,8 @@
                     android:text="@string/login"
                     android:textAllCaps="false"
                     android:textSize="@dimen/font_title_size"
-                    android:theme="@style/PSButton.LightGreenA100"
-                    app:backgroundTint="@color/colorAccent"
+                    android:background="@drawable/button_dialog_secondary_background"
+                    app:backgroundTint="@null"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/cardView" />

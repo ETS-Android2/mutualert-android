@@ -18,5 +18,5 @@ public class Constantes {
     public static final int CODE_LENGTH = 6;
     public static final int CODE_RESEND_TIME = 60;
     public static final int PERSON_NAME_LENGTH = 4;
-    public static final int PASSWORD = 6;
+    public static final int PASSWORD_LENGTH = 6;
 }

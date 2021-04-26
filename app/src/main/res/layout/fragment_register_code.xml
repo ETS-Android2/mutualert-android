@@ -105,7 +105,6 @@
                 android:fontFamily="@font/roboto"
                 android:textAllCaps="false"
                 android:text="@string/continue_str"
-                android:textColor="@color/md_white_1000"
                 android:textSize="@dimen/font_body_size"
                 app:backgroundTint="@null"
                 app:layout_constraintEnd_toEndOf="parent"

@@ -2,6 +2,7 @@ package com.mcuevapps.mutualert.retrofit;
 
 import com.mcuevapps.mutualert.retrofit.request.RequestUserAccountExist;
 import com.mcuevapps.mutualert.retrofit.request.RequestUserAuthCheckcode;
+import com.mcuevapps.mutualert.retrofit.request.RequestUserAuthLogin;
 import com.mcuevapps.mutualert.retrofit.request.RequestUserAuthNewpassword;
 import com.mcuevapps.mutualert.retrofit.request.RequestUserAuthSignup;
 import com.mcuevapps.mutualert.retrofit.response.ResponseSuccess;
@@ -14,10 +15,9 @@ import retrofit2.http.POST;
 
 public interface MutuAlertService {
     /** User Auth **/
-    /*
-    @POST("auth/login")
-    Call<ResponseAuth> doLogin(@Body RequestLogin requestLogin);
-    */
+    @POST("user/auth/login")
+    Call<ResponseUserAuthSuccess> login(@Body RequestUserAuthLogin requestUserAuthLogin);
+
     @POST("user/auth/signup")
     Call<ResponseUserAuthSuccess> signUp(@Body RequestUserAuthSignup requestUserAuthSignup);
 

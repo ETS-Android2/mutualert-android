@@ -135,7 +135,7 @@ public class RegisterCodeFragment extends Fragment implements View.OnClickListen
         editTextCode.requestFocus();
 
         buttonContinue = view.findViewById(R.id.buttonContinue);
-        designService.ButtonDefaultDisable(buttonContinue);
+        designService.ButtonPrimaryDisable(buttonContinue);
         buttonContinue.setOnClickListener(this);
 
         buttonResend = view.findViewById(R.id.buttonResendCode);
@@ -152,11 +152,37 @@ public class RegisterCodeFragment extends Fragment implements View.OnClickListen
         resendCode();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
+    public void resendCode(){
+        designService.ButtonRaisedDisable(buttonResend);
+        resendTimeLeft = Constantes.CODE_RESEND_TIME;
 
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                if(resendTimeLeft==Constantes.CODE_RESEND_TIME){
+                    if(mResendToken!=null){
+                        resendVerificationCode();
+                    } else {
+                        startPhoneNumberVerification();
+                    }
+                }
+                resendTimeLeft--;
 
+                if (resendTimeLeft!=0) {
+                    buttonResend.setText(getString(R.string.resend_code)+" ... "+resendTimeLeft);
+                }else{
+                    buttonResend.setText(getString(R.string.resend_code));
+                }
+                if(resendTimeLeft!=0){
+                    handler.postDelayed(this, 1000);
+                } else {
+                    designService.ButtonRaisedEnable(buttonResend);
+                }
+            }
+        };
+
+        handler = new Handler();
+        handler.postDelayed(runnable,0000);
     }
 
     private void startPhoneNumberVerification() {
@@ -212,46 +238,13 @@ public class RegisterCodeFragment extends Fragment implements View.OnClickListen
                 .commit();
     }
 
-    public void resendCode(){
-        designService.ButtonDefaultDisable(buttonResend);
-        resendTimeLeft = Constantes.CODE_RESEND_TIME;
-
-        runnable = new Runnable() {
-            @Override
-            public void run() {
-                if(resendTimeLeft==Constantes.CODE_RESEND_TIME){
-                    if(mResendToken!=null){
-                        resendVerificationCode();
-                    } else {
-                        startPhoneNumberVerification();
-                    }
-                }
-                resendTimeLeft--;
-
-                if (resendTimeLeft!=0) {
-                    buttonResend.setText(getString(R.string.resend_code)+" ... "+resendTimeLeft);
-                }else{
-                    buttonResend.setText(getString(R.string.resend_code));
-                }
-                if(resendTimeLeft!=0){
-                    handler.postDelayed(this, 1000);
-                } else {
-                    designService.ButtonSecondEnable(buttonResend);
-                }
-            }
-        };
-
-        handler = new Handler();
-        handler.postDelayed(runnable,0000);
-    }
-
     @Override
     public void beforeTextChanged(CharSequence charSequence, int start, int count, int after) { }
 
     @Override
     public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
         if( charSequence.length() != Constantes.CODE_LENGTH ) {
-            designService.ButtonDefaultDisable(buttonContinue);
+            designService.ButtonPrimaryDisable(buttonContinue);
         } else {
             checkCode(charSequence.toString());
         }
@@ -267,10 +260,10 @@ public class RegisterCodeFragment extends Fragment implements View.OnClickListen
             @Override
             public void onResponse(Call<ResponseSuccess> call, Response<ResponseSuccess> response) {
                 if( response.isSuccessful() ){
-                    designService.ButtonDefaultEnable(buttonContinue);
+                    designService.ButtonPrimaryEnable(buttonContinue);
                     buttonResend.setText(getString(R.string.resend_code));
                     if(runnable != null ) handler.removeCallbacks(runnable);
-                    designService.ButtonDefaultDisable(buttonResend);
+                    designService.ButtonRaisedDisable(buttonResend);
                     //goToInfo();
                 } else {
                     ToastService.showErrorResponse(response.errorBody());

@@ -87,7 +87,7 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
 
         buttonRegister = (Button) view.findViewById(R.id.buttonRegister);
         buttonRegister.setOnClickListener(this);
-        designService.ButtonDefaultDisable(buttonRegister);
+        designService.ButtonSecondaryDisable(buttonRegister);
 
         buttonLogin = (Button) view.findViewById(R.id.buttonLogin);
         buttonLogin.setOnClickListener(this);
@@ -125,23 +125,16 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
 
         switch (id) {
             case R.id.buttonRegister:
-                goToDashboard();
+                clickButtonRegister();
                 break;
             case R.id.buttonLogin:
-                clickButtonLogin();
+                goToLogin();
                 break;
         }
     }
 
-    private void goToDashboard() {
-        Intent intent = new Intent(getActivity(), HomeActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        getActivity().finish();
-    }
-
-    private void clickButtonLogin() {
-        if(!isNewUser){
+    private void clickButtonRegister() {
+        if(isNewUser){
             signUp();
         } else {
             newPassword();
@@ -164,6 +157,7 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
                     SharedPreferencesManager.setSomeStringValue(Constantes.PREF_NOMBRES, response.body().getData().getProfile().getNombres());
                     SharedPreferencesManager.setSomeStringValue(Constantes.PREF_EMAIL, response.body().getData().getProfile().getEmail());
                     SharedPreferencesManager.setSomeStringValue(Constantes.PREF_AVATAR, response.body().getData().getProfile().getAvatar());
+                    goToDashboard();
                 } else {
                     ToastService.showErrorResponse(response.errorBody());
                 }
@@ -174,6 +168,13 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
                 Toast.makeText(MyApp.getContext(), getString(R.string.error_network), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void goToDashboard() {
+        Intent intent = new Intent(getActivity(), HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+        getActivity().finish();
     }
 
     private void newPassword(){
@@ -211,9 +212,9 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         if( formValid() ){
-            designService.ButtonDefaultEnable(buttonRegister);
+            designService.ButtonSecondaryEnable(buttonRegister);
         } else {
-            designService.ButtonDefaultDisable(buttonRegister);
+            designService.ButtonSecondaryDisable(buttonRegister);
         }
     }
 
@@ -232,7 +233,7 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
                 return false;
         }
 
-        if( editTextPassword.getText().toString().length() < Constantes.PASSWORD )
+        if( editTextPassword.getText().toString().length() < Constantes.PASSWORD_LENGTH )
             return false;
 
         return true;
