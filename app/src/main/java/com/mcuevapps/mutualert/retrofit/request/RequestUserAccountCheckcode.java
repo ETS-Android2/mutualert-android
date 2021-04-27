@@ -3,36 +3,44 @@ package com.mcuevapps.mutualert.retrofit.request;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class RequestUserAuthNewpassword {
+public class RequestUserAccountCheckcode {
 
+    @SerializedName("sessionInfo")
+    @Expose
+    private String sessionInfo;
     @SerializedName("code")
     @Expose
     private String code;
     @SerializedName("username")
     @Expose
     private String username;
-    @SerializedName("password")
-    @Expose
-    private String password;
 
     /**
      * No args constructor for use in serialization
      *
      */
-    public RequestUserAuthNewpassword() {
+    public RequestUserAccountCheckcode() {
     }
 
     /**
      *
-     * @param password
+     * @param sessionInfo
      * @param code
      * @param username
      */
-    public RequestUserAuthNewpassword(String code, String username, String password) {
+    public RequestUserAccountCheckcode(String sessionInfo, String code, String username) {
         super();
+        this.sessionInfo = sessionInfo;
         this.code = code;
         this.username = username;
-        this.password = password;
+    }
+
+    public String getSessionInfo() {
+        return sessionInfo;
+    }
+
+    public void setSessionInfo(String sessionInfo) {
+        this.sessionInfo = sessionInfo;
     }
 
     public String getCode() {
@@ -49,14 +57,6 @@ public class RequestUserAuthNewpassword {
 
     public void setUsername(String username) {
         this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
 }

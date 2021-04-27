@@ -23,7 +23,7 @@ import com.mcuevapps.mutualert.common.SharedPreferencesManager;
 import com.mcuevapps.mutualert.common.ToastService;
 import com.mcuevapps.mutualert.retrofit.MutuAlertClient;
 import com.mcuevapps.mutualert.retrofit.MutuAlertService;
-import com.mcuevapps.mutualert.retrofit.request.RequestUserAuthNewpassword;
+import com.mcuevapps.mutualert.retrofit.request.RequestUserAccountNewpassword;
 import com.mcuevapps.mutualert.retrofit.request.RequestUserAuthSignup;
 import com.mcuevapps.mutualert.retrofit.response.ResponseSuccess;
 import com.mcuevapps.mutualert.retrofit.response.ResponseUserAuthSuccess;
@@ -178,9 +178,9 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
     }
 
     private void newPassword(){
-        RequestUserAuthNewpassword requestUserAuthNewpassword = new RequestUserAuthNewpassword(
+        RequestUserAccountNewpassword requestUserAccountNewpassword = new RequestUserAccountNewpassword(
                 code, phone, editTextPassword.getText().toString() );
-        Call<ResponseSuccess> call = mutuAlertService.newPassword(requestUserAuthNewpassword);
+        Call<ResponseSuccess> call = mutuAlertService.newPassword(requestUserAccountNewpassword);
         call.enqueue(new Callback<ResponseSuccess>() {
             @Override
             public void onResponse(Call<ResponseSuccess> call, Response<ResponseSuccess> response) {

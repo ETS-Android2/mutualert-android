@@ -32,7 +32,7 @@ import com.mcuevapps.mutualert.common.MyApp;
 import com.mcuevapps.mutualert.common.ToastService;
 import com.mcuevapps.mutualert.retrofit.MutuAlertClient;
 import com.mcuevapps.mutualert.retrofit.MutuAlertService;
-import com.mcuevapps.mutualert.retrofit.request.RequestUserAuthCheckcode;
+import com.mcuevapps.mutualert.retrofit.request.RequestUserAccountCheckcode;
 import com.mcuevapps.mutualert.retrofit.response.ResponseSuccess;
 
 import java.util.concurrent.TimeUnit;
@@ -254,8 +254,8 @@ public class RegisterCodeFragment extends Fragment implements View.OnClickListen
     public void afterTextChanged(Editable editable) { }
 
     public void checkCode(String code){
-        RequestUserAuthCheckcode requestUserAuthCheckcode = new RequestUserAuthCheckcode(mVerificationId, code, phone);
-        Call<ResponseSuccess> call = mutuAlertService.checkCode(requestUserAuthCheckcode);
+        RequestUserAccountCheckcode requestUserAccountCheckcode = new RequestUserAccountCheckcode(mVerificationId, code, phone);
+        Call<ResponseSuccess> call = mutuAlertService.checkCode(requestUserAccountCheckcode);
         call.enqueue(new Callback<ResponseSuccess>() {
             @Override
             public void onResponse(Call<ResponseSuccess> call, Response<ResponseSuccess> response) {
