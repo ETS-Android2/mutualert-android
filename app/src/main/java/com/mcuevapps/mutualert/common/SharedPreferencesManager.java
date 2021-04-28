@@ -34,13 +34,13 @@ public class SharedPreferencesManager {
         return getSharedPreferences().getBoolean(dataLabel, false);
     }
 
-    public void deleteSomeValue(String dataLabel) {
+    public static void deleteSomeValue(String dataLabel) {
         SharedPreferences.Editor editor = getSharedPreferences().edit();
         editor.remove(dataLabel);
         editor.commit();
     }
 
-    public void deleteAllValue() {
+    public static void deleteAllValues() {
         SharedPreferences.Editor editor = getSharedPreferences().edit();
         editor.clear();
         editor.commit();

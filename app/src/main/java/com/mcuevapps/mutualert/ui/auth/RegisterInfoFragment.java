@@ -16,11 +16,11 @@ import android.widget.Toast;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.mcuevapps.mutualert.R;
+import com.mcuevapps.mutualert.Service.Utils;
 import com.mcuevapps.mutualert.common.Constantes;
-import com.mcuevapps.mutualert.common.DesignService;
+import com.mcuevapps.mutualert.Service.DesignService;
 import com.mcuevapps.mutualert.common.MyApp;
 import com.mcuevapps.mutualert.common.SharedPreferencesManager;
-import com.mcuevapps.mutualert.common.ToastService;
 import com.mcuevapps.mutualert.retrofit.MutuAlertClient;
 import com.mcuevapps.mutualert.retrofit.MutuAlertService;
 import com.mcuevapps.mutualert.retrofit.request.RequestUserAccountNewpassword;
@@ -85,33 +85,33 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
     private void initUI() {
         designService = new DesignService(MyApp.getContext());
 
-        buttonRegister = (Button) view.findViewById(R.id.buttonRegister);
+        buttonRegister = view.findViewById(R.id.buttonRegister);
         buttonRegister.setOnClickListener(this);
         designService.ButtonSecondaryDisable(buttonRegister);
 
-        buttonLogin = (Button) view.findViewById(R.id.buttonLogin);
+        buttonLogin = view.findViewById(R.id.buttonLogin);
         buttonLogin.setOnClickListener(this);
 
-        editTextPassword = (TextInputEditText) view.findViewById(R.id.editTextPassword);
+        editTextPassword = view.findViewById(R.id.editTextPassword);
         editTextPassword.addTextChangedListener(this);
-        editTextApellidoPaterno = (TextInputEditText) view.findViewById(R.id.editTextApellidoPaterno);
+        editTextApellidoPaterno = view.findViewById(R.id.editTextApellidoPaterno);
         editTextApellidoPaterno.addTextChangedListener(this);
-        editTextApellidoMaterno = (TextInputEditText) view.findViewById(R.id.editTextApellidoMaterno);
+        editTextApellidoMaterno = view.findViewById(R.id.editTextApellidoMaterno);
         editTextApellidoMaterno.addTextChangedListener(this);
-        editTextNombres = (TextInputEditText) view.findViewById(R.id.editTextNombres);
+        editTextNombres =  view.findViewById(R.id.editTextNombres);
         editTextNombres.addTextChangedListener(this);
 
         if(!isNewUser){
-            textInputLayoutPassword = (TextInputLayout) view.findViewById(R.id.textInputLayoutPassword);
+            textInputLayoutPassword = view.findViewById(R.id.textInputLayoutPassword);
             textInputLayoutPassword.setHint(getString(R.string.new_password));
 
-            textInputLayoutApellidoPaterno = (TextInputLayout) view.findViewById(R.id.textInputLayoutApellidoPaterno);
+            textInputLayoutApellidoPaterno = view.findViewById(R.id.textInputLayoutApellidoPaterno);
             textInputLayoutApellidoPaterno.setVisibility(View.GONE);
 
-            textInputLayoutApellidoMaterno = (TextInputLayout) view.findViewById(R.id.textInputLayoutApellidoMaterno);
+            textInputLayoutApellidoMaterno = view.findViewById(R.id.textInputLayoutApellidoMaterno);
             textInputLayoutApellidoMaterno.setVisibility(View.GONE);
 
-            textInputLayoutNombres = (TextInputLayout) view.findViewById(R.id.textInputLayoutNombres);
+            textInputLayoutNombres = view.findViewById(R.id.textInputLayoutNombres);
             textInputLayoutNombres.setVisibility(View.GONE);
 
             buttonRegister.setText(getString(R.string.confirm));
@@ -150,16 +150,8 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
             @Override
             public void onResponse(Call<ResponseUserAuthSuccess> call, Response<ResponseUserAuthSuccess> response) {
                 if( response.isSuccessful() ){
-                    SharedPreferencesManager.setSomeStringValue(Constantes.PREF_USERNAME, phone);
-                    SharedPreferencesManager.setSomeStringValue(Constantes.PREF_TOKEN, response.body().getData().getToken());
-                    SharedPreferencesManager.setSomeStringValue(Constantes.PREF_APELLIDOPAT, response.body().getData().getProfile().getApepat());
-                    SharedPreferencesManager.setSomeStringValue(Constantes.PREF_APELLIDOMAT, response.body().getData().getProfile().getApemat());
-                    SharedPreferencesManager.setSomeStringValue(Constantes.PREF_NOMBRES, response.body().getData().getProfile().getNombres());
-                    SharedPreferencesManager.setSomeStringValue(Constantes.PREF_EMAIL, response.body().getData().getProfile().getEmail());
-                    SharedPreferencesManager.setSomeStringValue(Constantes.PREF_AVATAR, response.body().getData().getProfile().getAvatar());
+                    Utils.saveDataLogin(response.body().getData());
                     goToDashboard();
-                } else {
-                    ToastService.showErrorResponse(response.errorBody());
                 }
             }
 
@@ -187,8 +179,6 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
                 if( response.isSuccessful() ){
                     SharedPreferencesManager.setSomeStringValue(Constantes.PREF_USERNAME, phone);
                     goToLogin();
-                } else {
-                    ToastService.showErrorResponse(response.errorBody());
                 }
             }
 

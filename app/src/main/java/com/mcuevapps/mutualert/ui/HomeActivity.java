@@ -66,7 +66,7 @@ public class HomeActivity extends AppCompatActivity {
         fab = findViewById(R.id.fab);
         textViewToolbar = findViewById(R.id.textViewToolbar);
 
-        BottomAppBar navigation = (BottomAppBar) findViewById(R.id.bottomAppBar);
+        BottomAppBar navigation = findViewById(R.id.bottomAppBar);
         navigation.setOnMenuItemClickListener(mOnMenuItemClickListener);
 
         getSupportFragmentManager()

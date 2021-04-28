@@ -26,10 +26,9 @@ import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.mcuevapps.mutualert.R;
 import com.mcuevapps.mutualert.common.Constantes;
-import com.mcuevapps.mutualert.common.DesignService;
+import com.mcuevapps.mutualert.Service.DesignService;
 import com.mcuevapps.mutualert.common.InputFilterMinMax;
 import com.mcuevapps.mutualert.common.MyApp;
-import com.mcuevapps.mutualert.common.ToastService;
 import com.mcuevapps.mutualert.retrofit.MutuAlertClient;
 import com.mcuevapps.mutualert.retrofit.MutuAlertService;
 import com.mcuevapps.mutualert.retrofit.request.RequestUserAccountCheckcode;
@@ -265,8 +264,6 @@ public class RegisterCodeFragment extends Fragment implements View.OnClickListen
                     if(runnable != null ) handler.removeCallbacks(runnable);
                     designService.ButtonRaisedDisable(buttonResend);
                     //goToInfo();
-                } else {
-                    ToastService.showErrorResponse(response.errorBody());
                 }
             }
 

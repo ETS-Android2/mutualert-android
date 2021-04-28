@@ -1,4 +1,4 @@
-package com.mcuevapps.mutualert.common;
+package com.mcuevapps.mutualert.Service;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;

@@ -16,10 +16,9 @@ import android.widget.Toast;
 
 import com.mcuevapps.mutualert.R;
 import com.mcuevapps.mutualert.common.Constantes;
-import com.mcuevapps.mutualert.common.DesignService;
+import com.mcuevapps.mutualert.Service.DesignService;
 import com.mcuevapps.mutualert.common.InputFilterMinMax;
 import com.mcuevapps.mutualert.common.MyApp;
-import com.mcuevapps.mutualert.common.ToastService;
 import com.mcuevapps.mutualert.retrofit.MutuAlertClient;
 import com.mcuevapps.mutualert.retrofit.MutuAlertService;
 import com.mcuevapps.mutualert.retrofit.request.RequestUserAccountExist;
@@ -99,8 +98,6 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
                     } else {
                         Toast.makeText(MyApp.getContext(), (isNewUser ? getString(R.string.phone_exist) : getString(R.string.phone_not_exist)), Toast.LENGTH_SHORT).show();
                     }
-                } else {
-                    ToastService.showErrorResponse(response.errorBody());
                 }
             }
 

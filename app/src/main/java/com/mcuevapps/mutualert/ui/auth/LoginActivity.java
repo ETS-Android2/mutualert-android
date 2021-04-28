@@ -13,11 +13,11 @@ import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.mcuevapps.mutualert.R;
+import com.mcuevapps.mutualert.Service.Utils;
 import com.mcuevapps.mutualert.common.Constantes;
-import com.mcuevapps.mutualert.common.DesignService;
+import com.mcuevapps.mutualert.Service.DesignService;
 import com.mcuevapps.mutualert.common.MyApp;
 import com.mcuevapps.mutualert.common.SharedPreferencesManager;
-import com.mcuevapps.mutualert.common.ToastService;
 import com.mcuevapps.mutualert.retrofit.MutuAlertClient;
 import com.mcuevapps.mutualert.retrofit.MutuAlertService;
 import com.mcuevapps.mutualert.retrofit.request.RequestUserAuthLogin;
@@ -61,15 +61,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private void initUI() {
         designService = new DesignService(getApplicationContext());
 
-
-        buttonLogin = (Button) findViewById(R.id.buttonLogin);
+        buttonLogin = findViewById(R.id.buttonLogin);
         buttonLogin.setOnClickListener(this);
         designService.ButtonSecondaryDisable(buttonLogin);
 
-        buttonCreateAccount = (Button) findViewById(R.id.buttonCreateAccount);
+        buttonCreateAccount = findViewById(R.id.buttonCreateAccount);
         buttonCreateAccount.setOnClickListener(this);
 
-        buttonForgotPassword = (Button) findViewById(R.id.buttonForgotPassword);
+        buttonForgotPassword = findViewById(R.id.buttonForgotPassword);
         buttonForgotPassword.setOnClickListener(this);
 
         editTextPhone = findViewById(R.id.editTextPhone);
@@ -112,15 +111,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onResponse(Call<ResponseUserAuthSuccess> call, Response<ResponseUserAuthSuccess> response) {
                 if( response.isSuccessful() ){
                     SharedPreferencesManager.setSomeStringValue(Constantes.PREF_USERNAME, editTextPhone.getText().toString());
-                    SharedPreferencesManager.setSomeStringValue(Constantes.PREF_TOKEN, response.body().getData().getToken());
-                    SharedPreferencesManager.setSomeStringValue(Constantes.PREF_APELLIDOPAT, response.body().getData().getProfile().getApepat());
-                    SharedPreferencesManager.setSomeStringValue(Constantes.PREF_APELLIDOMAT, response.body().getData().getProfile().getApemat());
-                    SharedPreferencesManager.setSomeStringValue(Constantes.PREF_NOMBRES, response.body().getData().getProfile().getNombres());
-                    SharedPreferencesManager.setSomeStringValue(Constantes.PREF_EMAIL, response.body().getData().getProfile().getEmail());
-                    SharedPreferencesManager.setSomeStringValue(Constantes.PREF_AVATAR, response.body().getData().getProfile().getAvatar());
+                    Utils.saveDataLogin(response.body().getData());
                     goToDashboard();
-                } else {
-                    ToastService.showErrorResponse(response.errorBody());
                 }
             }
 
@@ -135,7 +127,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
-        finish();
+        this.finish();
     }
 
     private void goToSignUp(boolean isNewUser) {
