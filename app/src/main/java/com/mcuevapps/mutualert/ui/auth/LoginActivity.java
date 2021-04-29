@@ -22,7 +22,6 @@ import com.mcuevapps.mutualert.retrofit.MutuAlertClient;
 import com.mcuevapps.mutualert.retrofit.MutuAlertService;
 import com.mcuevapps.mutualert.retrofit.request.RequestUserAuthLogin;
 import com.mcuevapps.mutualert.retrofit.response.ResponseUserAuthSuccess;
-import com.mcuevapps.mutualert.ui.HomeActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -95,10 +94,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 login();
                 break;
             case R.id.buttonCreateAccount:
-                goToSignUp(true);
+                goToRegister(true);
                 break;
             case R.id.buttonForgotPassword:
-                goToSignUp(false);
+                goToRegister(false);
                 break;
         }
     }
@@ -112,7 +111,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 if( response.isSuccessful() ){
                     SharedPreferencesManager.setSomeStringValue(Constantes.PREF_USERNAME, editTextPhone.getText().toString());
                     Utils.saveDataLogin(response.body().getData());
-                    goToDashboard();
+                    Utils.goToHome();
+                    LoginActivity.this.finish();
                 }
             }
 
@@ -123,14 +123,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         });
     }
 
-    private void goToDashboard() {
-        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        this.finish();
-    }
-
-    private void goToSignUp(boolean isNewUser) {
+    private void goToRegister(boolean isNewUser) {
         Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
         intent.putExtra("isNewUser", isNewUser);
         startActivity(intent);

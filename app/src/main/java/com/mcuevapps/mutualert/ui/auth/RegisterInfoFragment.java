@@ -1,6 +1,5 @@
 package com.mcuevapps.mutualert.ui.auth;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -27,7 +26,6 @@ import com.mcuevapps.mutualert.retrofit.request.RequestUserAccountNewpassword;
 import com.mcuevapps.mutualert.retrofit.request.RequestUserAuthSignup;
 import com.mcuevapps.mutualert.retrofit.response.ResponseSuccess;
 import com.mcuevapps.mutualert.retrofit.response.ResponseUserAuthSuccess;
-import com.mcuevapps.mutualert.ui.HomeActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -128,7 +126,8 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
                 clickButtonRegister();
                 break;
             case R.id.buttonLogin:
-                goToLogin();
+                Utils.goToLogin();
+                getActivity().finish();
                 break;
         }
     }
@@ -150,8 +149,10 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
             @Override
             public void onResponse(Call<ResponseUserAuthSuccess> call, Response<ResponseUserAuthSuccess> response) {
                 if( response.isSuccessful() ){
+                    SharedPreferencesManager.setSomeStringValue(Constantes.PREF_USERNAME, phone);
                     Utils.saveDataLogin(response.body().getData());
-                    goToDashboard();
+                    Utils.goToHome();
+                    getActivity().finish();
                 }
             }
 
@@ -160,13 +161,6 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
                 Toast.makeText(MyApp.getContext(), getString(R.string.error_network), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void goToDashboard() {
-        Intent intent = new Intent(getActivity(), HomeActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        getActivity().finish();
     }
 
     private void newPassword(){
@@ -178,7 +172,8 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
             public void onResponse(Call<ResponseSuccess> call, Response<ResponseSuccess> response) {
                 if( response.isSuccessful() ){
                     SharedPreferencesManager.setSomeStringValue(Constantes.PREF_USERNAME, phone);
-                    goToLogin();
+                    Utils.goToLogin();
+                    getActivity().finish();
                 }
             }
 
@@ -187,13 +182,6 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
                 Toast.makeText(MyApp.getContext(), getString(R.string.error_network), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void goToLogin() {
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        getActivity().finish();
     }
 
     @Override

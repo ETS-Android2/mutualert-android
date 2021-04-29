@@ -87,7 +87,8 @@
         android:theme="@style/AppTheme2"
         app:backgroundTint="@color/colorPrimary"
         app:hideOnScroll="true"
-        app:menu="@menu/menu_home" />
+        app:navigationIcon="@drawable/ic_baseline_menu_white_24"
+        app:menu="@menu/menu_home_navigation" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab"

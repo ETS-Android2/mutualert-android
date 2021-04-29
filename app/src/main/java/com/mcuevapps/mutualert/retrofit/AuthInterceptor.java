@@ -28,10 +28,7 @@ public class AuthInterceptor implements Interceptor{
         Response response = chain.proceed(request);
         if (response.code()==Constantes.HTTP_UNAUTHORIZED || response.code()==Constantes.HTTP_FORBIDDEN ) {
             Utils.removeDataLogin();
-            Intent intent = new Intent(MyApp.getContext(), LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            MyApp.getContext().startActivity(intent);
-            ((Activity) MyApp.getContext()).finish();;
+            Utils.goToLogin();
         } else if ( !response.isSuccessful() && response.code()<Constantes.HTTP_SERVER_ERROR ) {
             ResponseError error = new Gson().fromJson(response.body().string(), ResponseError.class);
             Toast.makeText(MyApp.getContext(), error.getMsg(), Toast.LENGTH_SHORT).show();

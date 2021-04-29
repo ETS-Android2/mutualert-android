@@ -2,20 +2,28 @@ package com.mcuevapps.mutualert.ui;
 
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mcuevapps.mutualert.R;
+import com.mcuevapps.mutualert.common.MyApp;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
+import java.util.Objects;
+
 public class HomeActivity extends AppCompatActivity {
 
+    private static final String TAG = "HomeActivity";
+
     private TextView textViewToolbar;
+    private BottomSheetDialog bottomSheetDialog;
     private FloatingActionButton fab;
 
     private Toolbar.OnMenuItemClickListener mOnMenuItemClickListener = new Toolbar.OnMenuItemClickListener() {
@@ -66,8 +74,14 @@ public class HomeActivity extends AppCompatActivity {
         fab = findViewById(R.id.fab);
         textViewToolbar = findViewById(R.id.textViewToolbar);
 
-        BottomAppBar navigation = findViewById(R.id.bottomAppBar);
-        navigation.setOnMenuItemClickListener(mOnMenuItemClickListener);
+        BottomAppBar bottomAppBar = findViewById(R.id.bottomAppBar);
+        bottomAppBar.setOnMenuItemClickListener(mOnMenuItemClickListener);
+        bottomAppBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showBottomModal();
+            }
+        });
 
         getSupportFragmentManager()
                 .beginTransaction()
@@ -77,5 +91,10 @@ public class HomeActivity extends AppCompatActivity {
 
     private void setToolbarText(String text){
         textViewToolbar.setText(text);
+    }
+
+    private void showBottomModal(){
+        HomeBottomModalFragment bottomModalFragment = new HomeBottomModalFragment();
+        bottomModalFragment.show( getSupportFragmentManager(), "HomeBottomModalFragment" );
     }
 }

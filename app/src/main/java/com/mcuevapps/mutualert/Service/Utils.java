@@ -1,12 +1,17 @@
 package com.mcuevapps.mutualert.Service;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 
 import com.mcuevapps.mutualert.common.Constantes;
+import com.mcuevapps.mutualert.common.MyApp;
 import com.mcuevapps.mutualert.common.SharedPreferencesManager;
 import com.mcuevapps.mutualert.retrofit.response.UserAuthSuccess;
+import com.mcuevapps.mutualert.ui.HomeActivity;
+import com.mcuevapps.mutualert.ui.auth.LoginActivity;
 
 public class Utils {
     public static int dpToPx(Context context, int dp) {
@@ -29,5 +34,17 @@ public class Utils {
         if ( !TextUtils.isEmpty(username) ) {
             SharedPreferencesManager.setSomeStringValue(Constantes.PREF_USERNAME, username);
         }
+    }
+
+    public static void goToLogin(){
+        Intent intent = new Intent(MyApp.getContext(), LoginActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        MyApp.getContext().startActivity(intent);
+    }
+
+    public static void goToHome(){
+        Intent intent = new Intent(MyApp.getContext(), HomeActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        MyApp.getContext().startActivity(intent);
     }
 }

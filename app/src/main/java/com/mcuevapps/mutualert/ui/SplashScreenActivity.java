@@ -130,17 +130,11 @@ public class SplashScreenActivity extends AppCompatActivity {
     private void verifyToken(){
         String token = SharedPreferencesManager.getSomeStringValue(Constantes.PREF_TOKEN);
         if ( TextUtils.isEmpty(token) ) {
-            goToLogin();
+            Utils.goToLogin();
+            this.finish();
         }else{
             authToken();
         }
-    }
-
-    private void goToLogin() {
-        Intent intent = new Intent(SplashScreenActivity.this, LoginActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        this.finish();
     }
 
     private void authToken(){
@@ -150,7 +144,8 @@ public class SplashScreenActivity extends AppCompatActivity {
             public void onResponse(Call<ResponseUserAuthSuccess> call, Response<ResponseUserAuthSuccess> response) {
                 if( response.isSuccessful() ){
                     Utils.saveDataLogin(response.body().getData());
-                    goToDashboard();
+                    Utils.goToHome();
+                    SplashScreenActivity.this.finish();
                 }
             }
 
@@ -159,12 +154,5 @@ public class SplashScreenActivity extends AppCompatActivity {
                 Toast.makeText(MyApp.getContext(), getString(R.string.error_network), Toast.LENGTH_SHORT).show();
             }
         });
-    }
-
-    private void goToDashboard() {
-        Intent intent = new Intent(SplashScreenActivity.this, HomeActivity.class);
-        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        this.finish();
     }
 }
