@@ -3,7 +3,6 @@ package com.mcuevapps.mutualert.ui;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -14,9 +13,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.mcuevapps.mutualert.R;
 import com.mcuevapps.mutualert.Service.Utils;
-import com.mcuevapps.mutualert.ui.auth.LoginActivity;
-
-import okhttp3.internal.Util;
 
 public class HomeBottomModalFragment extends BottomSheetDialogFragment {
 

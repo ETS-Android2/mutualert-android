@@ -10,13 +10,11 @@ import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mcuevapps.mutualert.R;
-import com.mcuevapps.mutualert.common.MyApp;
+import com.mcuevapps.mutualert.ui.contacts.ContactListFragment;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-
-import java.util.Objects;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -39,7 +37,7 @@ public class HomeActivity extends AppCompatActivity {
                     fab.show();
                     break;
                 case R.id.navigation_contact:
-                    fragment = new ContactsFragment();
+                    fragment = new ContactListFragment();
                     setToolbarText(getString(R.string.contacts));
                     Toast.makeText(getApplicationContext(),getString(R.string.contacts), Toast.LENGTH_SHORT).show();
                     fab.hide();

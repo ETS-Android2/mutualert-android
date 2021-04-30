@@ -1,6 +1,5 @@
 package com.mcuevapps.mutualert.retrofit;
 
-import android.content.res.Resources;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
@@ -34,7 +33,7 @@ public class MutuAlertClient {
                     ResponseError error = new Gson().fromJson(response.body().string(), ResponseError.class);
                     Toast.makeText(MyApp.getContext(), error.getMsg(), Toast.LENGTH_SHORT).show();
                 } else if ( response.code()>=Constantes.HTTP_SERVER_ERROR ){
-                    Toast.makeText(MyApp.getContext(), Resources.getSystem().getString(R.string.error_response), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MyApp.getContext(), MyApp.getInstance().getString(R.string.error_response), Toast.LENGTH_SHORT).show();
                 }
                 return response;
             }

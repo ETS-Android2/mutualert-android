@@ -4,19 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.HomeBottomModalFragment">
+    android:background="@color/md_grey_100"
+    tools:context=".ui.contacts.ContactBottomModalFragment">
 
     <com.google.android.material.navigation.NavigationView
-        android:id="@+id/navigationView"
+        android:id="@+id/navigationViewContact"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        app:itemIconTint="@color/colorPrimary"
-        app:itemTextColor="@color/colorPrimary"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:itemIconTint="@color/colorAccentLight"
+        app:itemTextColor="@color/colorAccentLight"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:menu="@menu/menu_home_bottom_sheet"/>
+        app:menu="@menu/menu_contact_bottom_sheet"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

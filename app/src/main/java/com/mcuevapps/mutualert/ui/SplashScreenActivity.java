@@ -3,7 +3,6 @@ package com.mcuevapps.mutualert.ui;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.animation.Animator;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -19,7 +18,6 @@ import com.mcuevapps.mutualert.common.SharedPreferencesManager;
 import com.mcuevapps.mutualert.retrofit.AuthMutuAlertClient;
 import com.mcuevapps.mutualert.retrofit.AuthMutuAlertService;
 import com.mcuevapps.mutualert.retrofit.response.ResponseUserAuthSuccess;
-import com.mcuevapps.mutualert.ui.auth.LoginActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;

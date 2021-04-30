@@ -24,4 +24,7 @@ public class Constantes {
     public static final int HTTP_UNAUTHORIZED = 401;
     public static final int HTTP_FORBIDDEN = 403;
     public static final int HTTP_SERVER_ERROR = 500;
+
+    // Arguments
+    public static final String ARG_CONTACT_ID = "CONTACT_ID";
 }

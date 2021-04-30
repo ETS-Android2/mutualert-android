@@ -25,8 +25,9 @@
     <string name="phone_not_exist">El teléfono no se encuentra registrado</string>
     <string name="error_network">Error de red. Vuelve a intentarlo más tarde</string>
     <string name="error_response">Algo fue mal con los datos enviados</string>
+    <string name="logout">Cerrar Sesion</string>
     <string name="code_incorrect">Código ingresado es incorrecto</string>
-    <string name="logout">Cerrar Sesión</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="edit_contact">Editar Contacto</string>
+    <string name="delete_contact">Eliminar Contacto</string>
+    <string name="success_delete_contact">El contacto se ha eliminado</string>
 </resources>

@@ -1,12 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.recyclerview.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout  xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/list"
-    android:name="com.mcuevapps.mutualert.ui.ContactFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layoutManager="LinearLayoutManager"
-    tools:context=".ui.ContactsFragment"
     android:background="@color/md_grey_100"
-    tools:listitem="@layout/fragment_contact" />
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context=".ui.contacts.ContactListFragment">
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/space_8"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:paddingTop="2dp"
+            android:paddingBottom="3dp"
+            android:layout_margin="@dimen/space_4"
+            android:fadeScrollbars="false"
+            android:scrollbars="none"
+            app:layoutManager="LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:listitem="@layout/fragment_contact_item"/>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
