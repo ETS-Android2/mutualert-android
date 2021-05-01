@@ -19,6 +19,8 @@ import com.mcuevapps.mutualert.R;
 
 public class DashboardFragment extends Fragment {
 
+    private static final String TAG = "DashboardFragment";
+
     private View view;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {

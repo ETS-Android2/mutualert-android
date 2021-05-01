@@ -1,7 +1,6 @@
 package com.mcuevapps.mutualert.ui.auth;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 
@@ -24,12 +23,7 @@ public class RegisterActivity extends AppCompatActivity {
                 isNewUser = bundle.getBoolean("isNewUser");
             }
 
-            Bundle args = new Bundle();
-            args.putBoolean("isNewUser", isNewUser);
-
-            Fragment fragment = new RegisterPhoneFragment();
-            fragment.setArguments(args);
-
+            RegisterPhoneFragment fragment = RegisterPhoneFragment.newInstance(isNewUser);
             getSupportFragmentManager()
                     .beginTransaction()
                     .replace(R.id.frameLayoutRegister, fragment)

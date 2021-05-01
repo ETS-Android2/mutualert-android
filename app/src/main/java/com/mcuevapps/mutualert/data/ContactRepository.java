@@ -1,10 +1,9 @@
 package com.mcuevapps.mutualert.data;
 
-import android.widget.Toast;
-
 import androidx.lifecycle.MutableLiveData;
 
 import com.mcuevapps.mutualert.R;
+import com.mcuevapps.mutualert.Service.UIService;
 import com.mcuevapps.mutualert.common.MyApp;
 import com.mcuevapps.mutualert.retrofit.AuthMutuAlertClient;
 import com.mcuevapps.mutualert.retrofit.AuthMutuAlertService;
@@ -46,7 +45,7 @@ public class ContactRepository {
 
             @Override
             public void onFailure(Call<ResponseAlertContactList> call, Throwable t) {
-                Toast.makeText(MyApp.getContext(), MyApp.getInstance().getString(R.string.error_network), Toast.LENGTH_SHORT).show();
+                UIService.showEventToast(UIService.TOAST_ERROR, MyApp.getInstance().getString(R.string.error_network));
             }
         });
 
@@ -69,13 +68,13 @@ public class ContactRepository {
 
                     allContacts.setValue(clonedContacts);
                     //getAllContacts();
-                    Toast.makeText(MyApp.getContext(), MyApp.getInstance().getString(R.string.success_delete_contact), Toast.LENGTH_SHORT).show();
+                    UIService.showEventToast(UIService.TOAST_SUCCESS, MyApp.getInstance().getString(R.string.success_delete_contact));
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseSuccess> call, Throwable t) {
-                Toast.makeText(MyApp.getContext(), MyApp.getInstance().getString(R.string.error_network), Toast.LENGTH_SHORT).show();
+                UIService.showEventToast(UIService.TOAST_ERROR, MyApp.getInstance().getString(R.string.error_network));
             }
         });
     }

@@ -23,6 +23,8 @@ import java.util.List;
 
 public class ContactListFragment extends Fragment {
 
+    private static final String TAG = "ContactListFragment";
+
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;
     ContactRecyclerViewAdapter adapter;
@@ -57,7 +59,7 @@ public class ContactListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contact_list, container, false);
-        // Set the adapter
+
         //if (view instanceof RecyclerView) {
             Context context = view.getContext();
 

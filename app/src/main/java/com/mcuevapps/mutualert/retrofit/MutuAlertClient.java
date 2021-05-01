@@ -1,9 +1,8 @@
 package com.mcuevapps.mutualert.retrofit;
 
-import android.widget.Toast;
-
 import com.google.gson.Gson;
 import com.mcuevapps.mutualert.R;
+import com.mcuevapps.mutualert.Service.UIService;
 import com.mcuevapps.mutualert.common.Constantes;
 import com.mcuevapps.mutualert.common.MyApp;
 import com.mcuevapps.mutualert.retrofit.response.ResponseError;
@@ -29,11 +28,15 @@ public class MutuAlertClient {
             public Response intercept(Chain chain) throws IOException {
                 Request request = chain.request();
                 Response response = chain.proceed(request);
-                if ( !response.isSuccessful() && response.code()<Constantes.HTTP_SERVER_ERROR ) {
-                    ResponseError error = new Gson().fromJson(response.body().string(), ResponseError.class);
-                    Toast.makeText(MyApp.getContext(), error.getMsg(), Toast.LENGTH_SHORT).show();
-                } else if ( response.code()>=Constantes.HTTP_SERVER_ERROR ){
-                    Toast.makeText(MyApp.getContext(), MyApp.getInstance().getString(R.string.error_response), Toast.LENGTH_SHORT).show();
+                try {
+                    if ( !response.isSuccessful() && response.code()<Constantes.HTTP_SERVER_ERROR ) {
+                        ResponseError error = new Gson().fromJson(response.body().string(), ResponseError.class);
+                        UIService.showEventToast(UIService.TOAST_ERROR, error.getMsg());
+                    } else if ( response.code()>=Constantes.HTTP_SERVER_ERROR ){
+                        UIService.showEventToast(UIService.TOAST_ERROR, MyApp.getInstance().getString(R.string.error_response));
+                    }
+                } catch (Exception e) {
+                    UIService.showEventToast(UIService.TOAST_ERROR, MyApp.getInstance().getString(R.string.error_network));
                 }
                 return response;
             }

@@ -4,17 +4,18 @@ import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mcuevapps.mutualert.R;
+import com.mcuevapps.mutualert.Service.UIService;
 import com.mcuevapps.mutualert.ui.contacts.ContactListFragment;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 
 public class HomeActivity extends AppCompatActivity {
 
@@ -32,23 +33,23 @@ public class HomeActivity extends AppCompatActivity {
             switch (item.getItemId()) {
                 case R.id.navigation_dashboard:
                     fragment = new DashboardFragment();
-                    setToolbarText(getString(R.string.dashboard));
-                    Toast.makeText(getApplicationContext(), getString(R.string.dashboard), Toast.LENGTH_SHORT).show();
                     fab.show();
                     break;
                 case R.id.navigation_contact:
                     fragment = new ContactListFragment();
-                    setToolbarText(getString(R.string.contacts));
-                    Toast.makeText(getApplicationContext(),getString(R.string.contacts), Toast.LENGTH_SHORT).show();
                     fab.hide();
                     break;
             }
 
-            if(fragment != null) {
+            FragmentManager fm = getSupportFragmentManager();
+            Fragment currentFragment = fm.findFragmentById(R.id.frameLayout);
+            if( fragment != null && !fragment.getClass().toString().equals(currentFragment.getTag()) ) {
                 getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.frameLayout, fragment)
+                        .replace(R.id.frameLayout, fragment, fragment.getClass().toString())
                         .commit();
+                setToolbarText(item.getTitle().toString());
+                UIService.showEventToast(item.getTitle().toString());
                 return true;
             }
 
@@ -81,9 +82,10 @@ public class HomeActivity extends AppCompatActivity {
             }
         });
 
+        Fragment fragment = new DashboardFragment();
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.frameLayout, new DashboardFragment())
+                .add(R.id.frameLayout, fragment, fragment.getClass().toString())
                 .commit();
     }
 

@@ -9,14 +9,12 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.mcuevapps.mutualert.R;
+import com.mcuevapps.mutualert.Service.UIService;
 import com.mcuevapps.mutualert.Service.Utils;
 import com.mcuevapps.mutualert.common.Constantes;
-import com.mcuevapps.mutualert.Service.DesignService;
-import com.mcuevapps.mutualert.common.MyApp;
 import com.mcuevapps.mutualert.common.SharedPreferencesManager;
 import com.mcuevapps.mutualert.retrofit.MutuAlertClient;
 import com.mcuevapps.mutualert.retrofit.MutuAlertService;
@@ -37,7 +35,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private Button buttonCreateAccount;
     private Button buttonForgotPassword;
 
-    private DesignService designService;
     private MutuAlertClient mutuAlertClient;
     private MutuAlertService mutuAlertService;
 
@@ -58,11 +55,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void initUI() {
-        designService = new DesignService(getApplicationContext());
-
         buttonLogin = findViewById(R.id.buttonLogin);
         buttonLogin.setOnClickListener(this);
-        designService.ButtonSecondaryDisable(buttonLogin);
+        UIService.ButtonDisable(UIService.BUTTON_SECONDARY, buttonLogin);
 
         buttonCreateAccount = findViewById(R.id.buttonCreateAccount);
         buttonCreateAccount.setOnClickListener(this);
@@ -117,9 +112,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
 
             @Override
-            public void onFailure(Call<ResponseUserAuthSuccess> call, Throwable t) {
-                Toast.makeText(MyApp.getContext(), getString(R.string.error_network), Toast.LENGTH_SHORT).show();
-            }
+            public void onFailure(Call<ResponseUserAuthSuccess> call, Throwable t) { }
         });
     }
 
@@ -135,9 +128,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         if( formValid() ){
-            designService.ButtonSecondaryEnable(buttonLogin);
+            UIService.ButtonEnable(UIService.BUTTON_SECONDARY, buttonLogin);
         } else {
-            designService.ButtonSecondaryDisable(buttonLogin);
+            UIService.ButtonDisable(UIService.BUTTON_SECONDARY, buttonLogin);
         }
     }
 

@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.google.firebase.FirebaseException;
 import com.google.firebase.FirebaseTooManyRequestsException;
@@ -25,10 +24,9 @@ import com.google.firebase.auth.PhoneAuthCredential;
 import com.google.firebase.auth.PhoneAuthOptions;
 import com.google.firebase.auth.PhoneAuthProvider;
 import com.mcuevapps.mutualert.R;
+import com.mcuevapps.mutualert.Service.UIService;
 import com.mcuevapps.mutualert.common.Constantes;
-import com.mcuevapps.mutualert.Service.DesignService;
 import com.mcuevapps.mutualert.common.InputFilterMinMax;
-import com.mcuevapps.mutualert.common.MyApp;
 import com.mcuevapps.mutualert.retrofit.MutuAlertClient;
 import com.mcuevapps.mutualert.retrofit.MutuAlertService;
 import com.mcuevapps.mutualert.retrofit.request.RequestUserAccountCheckcode;
@@ -48,7 +46,7 @@ public class RegisterCodeFragment extends Fragment implements View.OnClickListen
 
     private View view;
 
-    private boolean isNewUser = true;
+    private boolean isNewUser;
     private String phone;
     private String mVerificationId;
     private PhoneAuthProvider.ForceResendingToken mResendToken;
@@ -60,21 +58,32 @@ public class RegisterCodeFragment extends Fragment implements View.OnClickListen
     private Button buttonContinue;
     private Button buttonResend;
 
-    private DesignService designService;
     private MutuAlertClient mutuAlertClient;
     private MutuAlertService mutuAlertService;
     private PhoneAuthProvider.OnVerificationStateChangedCallbacks mCallbacks;
+
+    public static RegisterCodeFragment newInstance(Boolean isNewUser, String phone) {
+        RegisterCodeFragment fragment = new RegisterCodeFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(Constantes.ARG_NEW_USER, isNewUser);
+        args.putString(Constantes.ARG_PHONE, phone);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            isNewUser = getArguments().getBoolean(Constantes.ARG_NEW_USER);
+            phone = getArguments().getString(Constantes.ARG_PHONE);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_register_code, container, false);
-
-        Bundle arguments = getArguments();
-        if(arguments!=null) {
-            isNewUser = arguments.getBoolean("isNewUser");
-            phone = arguments.getString("phone");
-        }
 
         retrofitInit();
         initUI();
@@ -87,8 +96,6 @@ public class RegisterCodeFragment extends Fragment implements View.OnClickListen
     }
 
     private void initUI() {
-        designService = new DesignService(MyApp.getContext());
-
         mAuth = FirebaseAuth.getInstance();
         mAuth.useAppLanguage();
 
@@ -134,7 +141,7 @@ public class RegisterCodeFragment extends Fragment implements View.OnClickListen
         editTextCode.requestFocus();
 
         buttonContinue = view.findViewById(R.id.buttonContinue);
-        designService.ButtonPrimaryDisable(buttonContinue);
+        UIService.ButtonDisable(UIService.BUTTON_PRIMARY, buttonContinue);
         buttonContinue.setOnClickListener(this);
 
         buttonResend = view.findViewById(R.id.buttonResendCode);
@@ -152,7 +159,7 @@ public class RegisterCodeFragment extends Fragment implements View.OnClickListen
     }
 
     public void resendCode(){
-        designService.ButtonRaisedDisable(buttonResend);
+        UIService.ButtonDisable(UIService.BUTTON_RAISED, buttonResend);
         resendTimeLeft = Constantes.CODE_RESEND_TIME;
 
         runnable = new Runnable() {
@@ -175,7 +182,7 @@ public class RegisterCodeFragment extends Fragment implements View.OnClickListen
                 if(resendTimeLeft!=0){
                     handler.postDelayed(this, 1000);
                 } else {
-                    designService.ButtonRaisedEnable(buttonResend);
+                    UIService.ButtonEnable(UIService.BUTTON_RAISED, buttonResend);
                 }
             }
         };
@@ -222,14 +229,7 @@ public class RegisterCodeFragment extends Fragment implements View.OnClickListen
     }
 
     private void goToInfo() {
-        Bundle args = new Bundle();
-        args.putString("phone", phone);
-        args.putString("code", editTextCode.getText().toString());
-        args.putBoolean("isNewUser", isNewUser);
-
-        Fragment fragment = new RegisterInfoFragment();
-        fragment.setArguments(args);
-
+        RegisterInfoFragment fragment = RegisterInfoFragment.newInstance(isNewUser, phone, editTextCode.getText().toString());
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.frameLayoutRegister, fragment)
@@ -243,7 +243,7 @@ public class RegisterCodeFragment extends Fragment implements View.OnClickListen
     @Override
     public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
         if( charSequence.length() != Constantes.CODE_LENGTH ) {
-            designService.ButtonPrimaryDisable(buttonContinue);
+            UIService.ButtonDisable(UIService.BUTTON_PRIMARY, buttonContinue);
         } else {
             checkCode(charSequence.toString());
         }
@@ -259,18 +259,16 @@ public class RegisterCodeFragment extends Fragment implements View.OnClickListen
             @Override
             public void onResponse(Call<ResponseSuccess> call, Response<ResponseSuccess> response) {
                 if( response.isSuccessful() ){
-                    designService.ButtonPrimaryEnable(buttonContinue);
+                    UIService.ButtonEnable(UIService.BUTTON_PRIMARY, buttonContinue);
                     buttonResend.setText(getString(R.string.resend_code));
                     if(runnable != null ) handler.removeCallbacks(runnable);
-                    designService.ButtonRaisedDisable(buttonResend);
+                    UIService.ButtonDisable(UIService.BUTTON_RAISED, buttonResend);
                     //goToInfo();
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseSuccess> call, Throwable t) {
-                Toast.makeText(MyApp.getContext(), getString(R.string.error_network), Toast.LENGTH_SHORT).show();
-            }
+            public void onFailure(Call<ResponseSuccess> call, Throwable t) { }
         });
     }
 }

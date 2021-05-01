@@ -10,15 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.Toast;
 
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.mcuevapps.mutualert.R;
+import com.mcuevapps.mutualert.Service.UIService;
 import com.mcuevapps.mutualert.Service.Utils;
 import com.mcuevapps.mutualert.common.Constantes;
-import com.mcuevapps.mutualert.Service.DesignService;
-import com.mcuevapps.mutualert.common.MyApp;
 import com.mcuevapps.mutualert.common.SharedPreferencesManager;
 import com.mcuevapps.mutualert.retrofit.MutuAlertClient;
 import com.mcuevapps.mutualert.retrofit.MutuAlertService;
@@ -37,7 +35,7 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
 
     private View view;
 
-    private boolean isNewUser = true;
+    private boolean isNewUser;
     private String phone;
     private String code;
 
@@ -54,21 +52,33 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
     private TextInputEditText editTextApellidoMaterno;
     private TextInputEditText editTextNombres;
 
-    private DesignService designService;
     private MutuAlertClient mutuAlertClient;
     private MutuAlertService mutuAlertService;
+
+    public static RegisterInfoFragment newInstance(Boolean isNewUser, String phone, String code) {
+        RegisterInfoFragment fragment = new RegisterInfoFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(Constantes.ARG_NEW_USER, isNewUser);
+        args.putString(Constantes.ARG_PHONE, phone);
+        args.putString(Constantes.ARG_CODE, code);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            isNewUser = getArguments().getBoolean(Constantes.ARG_NEW_USER);
+            phone = getArguments().getString(Constantes.ARG_PHONE);
+            code = getArguments().getString(Constantes.ARG_CODE);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_register_info, container, false);
-
-        Bundle arguments = getArguments();
-        if(arguments!=null){
-            isNewUser = arguments.getBoolean("isNewUser");
-            phone = arguments.getString("phone");
-            code = arguments.getString("code");
-        }
 
         retrofitInit();
         initUI();
@@ -81,11 +91,9 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
     }
 
     private void initUI() {
-        designService = new DesignService(MyApp.getContext());
-
         buttonRegister = view.findViewById(R.id.buttonRegister);
         buttonRegister.setOnClickListener(this);
-        designService.ButtonSecondaryDisable(buttonRegister);
+        UIService.ButtonDisable(UIService.BUTTON_SECONDARY, buttonRegister);
 
         buttonLogin = view.findViewById(R.id.buttonLogin);
         buttonLogin.setOnClickListener(this);
@@ -157,9 +165,7 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
             }
 
             @Override
-            public void onFailure(Call<ResponseUserAuthSuccess> call, Throwable t) {
-                Toast.makeText(MyApp.getContext(), getString(R.string.error_network), Toast.LENGTH_SHORT).show();
-            }
+            public void onFailure(Call<ResponseUserAuthSuccess> call, Throwable t) { }
         });
     }
 
@@ -178,9 +184,7 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
             }
 
             @Override
-            public void onFailure(Call<ResponseSuccess> call, Throwable t) {
-                Toast.makeText(MyApp.getContext(), getString(R.string.error_network), Toast.LENGTH_SHORT).show();
-            }
+            public void onFailure(Call<ResponseSuccess> call, Throwable t) { }
         });
     }
 
@@ -190,9 +194,9 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
     @Override
     public void onTextChanged(CharSequence s, int start, int before, int count) {
         if( formValid() ){
-            designService.ButtonSecondaryEnable(buttonRegister);
+            UIService.ButtonEnable(UIService.BUTTON_SECONDARY, buttonRegister);
         } else {
-            designService.ButtonSecondaryDisable(buttonRegister);
+            UIService.ButtonDisable(UIService.BUTTON_SECONDARY, buttonRegister);
         }
     }
 

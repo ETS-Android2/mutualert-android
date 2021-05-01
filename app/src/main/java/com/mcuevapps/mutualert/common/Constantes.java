@@ -26,5 +26,8 @@ public class Constantes {
     public static final int HTTP_SERVER_ERROR = 500;
 
     // Arguments
+    public static final String ARG_NEW_USER = "NEW_USER";
+    public static final String ARG_PHONE = "PHONE";
+    public static final String ARG_CODE = "CODE";
     public static final String ARG_CONTACT_ID = "CONTACT_ID";
 }

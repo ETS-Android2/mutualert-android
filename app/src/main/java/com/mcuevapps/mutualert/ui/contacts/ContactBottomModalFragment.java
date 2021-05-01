@@ -19,7 +19,7 @@ import com.mcuevapps.mutualert.data.ContactViewModel;
 
 public class ContactBottomModalFragment extends BottomSheetDialogFragment {
 
-    private static final String TAG = "HomeBottomModalFragment";
+    private static final String TAG = "ContactBottomModalFragment";
 
     private ContactViewModel contactViewModel;
     private int idContact;
@@ -61,7 +61,6 @@ public class ContactBottomModalFragment extends BottomSheetDialogFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         if(getArguments() != null) {
             idContact = getArguments().getInt(Constantes.ARG_CONTACT_ID);
         }

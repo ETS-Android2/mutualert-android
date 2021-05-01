@@ -6,19 +6,19 @@ import androidx.fragment.app.Fragment;
 
 import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.mcuevapps.mutualert.R;
+import com.mcuevapps.mutualert.Service.UIService;
 import com.mcuevapps.mutualert.common.Constantes;
-import com.mcuevapps.mutualert.Service.DesignService;
 import com.mcuevapps.mutualert.common.InputFilterMinMax;
-import com.mcuevapps.mutualert.common.MyApp;
+import com.mcuevapps.mutualert.common.SharedPreferencesManager;
 import com.mcuevapps.mutualert.retrofit.MutuAlertClient;
 import com.mcuevapps.mutualert.retrofit.MutuAlertService;
 import com.mcuevapps.mutualert.retrofit.request.RequestUserAccountExist;
@@ -34,24 +34,34 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
 
     private View view;
 
-    private boolean isNewUser = true;
+    private boolean isNewUser;
 
     private EditText editTextPhone;
     private Button buttonContinue;
 
-    private DesignService designService;
     private MutuAlertClient mutuAlertClient;
     private MutuAlertService mutuAlertService;
+
+    public static RegisterPhoneFragment newInstance(Boolean isNewUser) {
+        RegisterPhoneFragment fragment = new RegisterPhoneFragment();
+        Bundle args = new Bundle();
+        args.putBoolean(Constantes.ARG_NEW_USER, isNewUser);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        if (getArguments() != null) {
+            isNewUser = getArguments().getBoolean(Constantes.ARG_NEW_USER);
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_register_phone, container, false);
-
-        Bundle arguments = getArguments();
-        if(arguments!=null) {
-            isNewUser = arguments.getBoolean("isNewUser");
-        }
 
         retrofitInit();
         initUI();
@@ -64,15 +74,22 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
     }
 
     private void initUI() {
-        designService = new DesignService(MyApp.getContext());
-
         editTextPhone = view.findViewById(R.id.editTextPhone);
         editTextPhone.setFilters(new InputFilter[]{ new InputFilterMinMax("9", "999999999")});
         editTextPhone.addTextChangedListener(this);
 
         buttonContinue = view.findViewById(R.id.buttonContinue);
-        designService.ButtonPrimaryDisable(buttonContinue);
+        UIService.ButtonDisable(UIService.BUTTON_PRIMARY, buttonContinue);
         buttonContinue.setOnClickListener(this);
+
+        setCredentialsIfExist();
+    }
+
+    private void setCredentialsIfExist() {
+        String username = SharedPreferencesManager.getSomeStringValue(Constantes.PREF_USERNAME);
+        if ( !TextUtils.isEmpty(username) ) {
+            editTextPhone.setText(username);
+        }
     }
 
     @Override
@@ -96,26 +113,18 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
                     if( response.body().getData()!=isNewUser ) {
                         goToCode();
                     } else {
-                        Toast.makeText(MyApp.getContext(), (isNewUser ? getString(R.string.phone_exist) : getString(R.string.phone_not_exist)), Toast.LENGTH_SHORT).show();
+                        UIService.showEventToast(UIService.TOAST_WARNING, (isNewUser ? getString(R.string.phone_exist) : getString(R.string.phone_not_exist)));
                     }
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseSuccessBoolean> call, Throwable t) {
-                Toast.makeText(MyApp.getContext(), getString(R.string.error_network), Toast.LENGTH_SHORT).show();
-            }
+            public void onFailure(Call<ResponseSuccessBoolean> call, Throwable t) { }
         });
     }
 
     private void goToCode() {
-        Bundle args = new Bundle();
-        args.putString("phone", editTextPhone.getText().toString());
-        args.putBoolean("isNewUser", isNewUser);
-
-        Fragment fragment = new RegisterCodeFragment();
-        fragment.setArguments(args);
-
+        RegisterCodeFragment fragment = RegisterCodeFragment.newInstance(isNewUser, editTextPhone.getText().toString());
         getActivity().getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.frameLayoutRegister, fragment)
@@ -129,9 +138,9 @@ public class RegisterPhoneFragment extends Fragment implements View.OnClickListe
     @Override
     public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
         if( charSequence.length() != Constantes.PHONE_LENGTH ) {
-            designService.ButtonPrimaryDisable(buttonContinue);
+            UIService.ButtonDisable(UIService.BUTTON_PRIMARY, buttonContinue);
         } else {
-            designService.ButtonPrimaryEnable(buttonContinue);
+            UIService.ButtonEnable(UIService.BUTTON_PRIMARY, buttonContinue);
         }
     }
 
