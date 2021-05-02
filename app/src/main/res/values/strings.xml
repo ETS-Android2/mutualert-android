@@ -30,6 +30,6 @@
     <string name="edit_contact">Editar Contacto</string>
     <string name="delete_contact">Eliminar Contacto</string>
     <string name="success_delete_contact">El contacto se ha eliminado</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="cancel">Cancelar</string>
+    <string name="quest_contact_delete">¿Quieres borrar el contacto?</string>
 </resources>

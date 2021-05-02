@@ -208,7 +208,7 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
             if( editTextApellidoPaterno.getText().toString().length() < Constantes.PERSON_NAME_LENGTH)
                 return false;
 
-            if( editTextApellidoMaterno.getText().toString().length() <Constantes.PERSON_NAME_LENGTH )
+            if( editTextApellidoMaterno.getText().toString().length() < Constantes.PERSON_NAME_LENGTH )
                 return false;
 
             if( editTextNombres.getText().toString().length() < Constantes.PERSON_NAME_LENGTH )

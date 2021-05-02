@@ -1,15 +1,19 @@
 package com.mcuevapps.mutualert.Service;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
 
 import com.mcuevapps.mutualert.R;
 import com.mcuevapps.mutualert.common.MyApp;
@@ -67,6 +71,42 @@ public class UIService {
 
             }
         });
+    }
+
+    public static void showDialogConfirm(final InterfaceService.successListener listener, Context context, String title){
+        showDialogConfirm(listener, context, title, "", MyApp.getInstance().getString(R.string.confirm), MyApp.getInstance().getString(R.string.cancel));
+    }
+
+    public static void showDialogConfirm(final InterfaceService.successListener listener, Context context, String title, String acceptBtn){
+        showDialogConfirm(listener, context, title, "", acceptBtn, MyApp.getInstance().getString(R.string.cancel));
+    }
+
+    public static void showDialogConfirm(final InterfaceService.successListener listener, Context context, String title, String message, String acceptBtn){
+        showDialogConfirm(listener, context, title, message, acceptBtn, MyApp.getInstance().getString(R.string.cancel));
+    }
+
+    public static void showDialogConfirm(final InterfaceService.successListener listener, Context context,  String title, String message, String confirmBtn, String cancelBtn){
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+        builder.setTitle(title);
+        if( !TextUtils.isEmpty(message) ){
+            builder.setMessage(message);
+        }
+        builder.setPositiveButton(confirmBtn, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                listener.response(true);
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton(cancelBtn, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int id) {
+                listener.response(false);
+                dialog.dismiss();
+            }
+        });
+        builder.setIcon(R.drawable.ic_baseline_warning_black_24);
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     public static void ButtonEnable(int type, Button button){

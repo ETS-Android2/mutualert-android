@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.mcuevapps.mutualert.R;
+import com.mcuevapps.mutualert.Service.UIService;
 import com.mcuevapps.mutualert.common.Constantes;
 import com.mcuevapps.mutualert.data.ContactViewModel;
 
@@ -37,7 +38,7 @@ public class ContactBottomModalFragment extends BottomSheetDialogFragment {
                     success = true;
                     break;
                 case R.id.action_delete_Contact:
-                    contactViewModel.deleteContact(idContact);
+                    deleteContact();
                     success = true;
                     break;
             }
@@ -84,5 +85,13 @@ public class ContactBottomModalFragment extends BottomSheetDialogFragment {
     private void initUI() {
         final NavigationView nav = view.findViewById(R.id.navigationViewContact);
         nav.setNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+    }
+
+    private void deleteContact(){
+        UIService.showDialogConfirm(success -> {
+            if(success){
+                contactViewModel.deleteContact(idContact);
+            }
+        }, getContext(), getString(R.string.quest_contact_delete));
     }
 }
