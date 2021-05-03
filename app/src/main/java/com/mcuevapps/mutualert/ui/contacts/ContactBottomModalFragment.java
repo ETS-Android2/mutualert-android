@@ -1,6 +1,5 @@
 package com.mcuevapps.mutualert.ui.contacts;
 
-import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -11,16 +10,11 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.navigation.NavigationView;
+
 import com.mcuevapps.mutualert.R;
-import com.mcuevapps.mutualert.Service.UIService;
-import com.mcuevapps.mutualert.Service.Utils;
 import com.mcuevapps.mutualert.common.Constantes;
 import com.mcuevapps.mutualert.data.ContactViewModel;
 import com.mcuevapps.mutualert.retrofit.response.AlertContact;

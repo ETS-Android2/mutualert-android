@@ -1,24 +1,15 @@
 package com.mcuevapps.mutualert.ui;
 
-import android.app.Dialog;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.material.bottomappbar.BottomAppBar;
-import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.mcuevapps.mutualert.R;
 import com.mcuevapps.mutualert.Service.UIService;
-import com.mcuevapps.mutualert.Service.Utils;
 import com.mcuevapps.mutualert.common.Constantes;
 import com.mcuevapps.mutualert.data.ContactViewModel;
 import com.mcuevapps.mutualert.retrofit.response.AlertContact;
@@ -28,7 +19,6 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
@@ -40,7 +30,6 @@ public class HomeActivity extends AppCompatActivity {
     private static final String TAG = "HomeActivity";
 
     private TextView textViewToolbar;
-    private BottomSheetDialog bottomSheetDialog;
     private FloatingActionButton fab;
 
     private ContactViewModel contactViewModel;
@@ -135,10 +124,9 @@ public class HomeActivity extends AppCompatActivity {
             fab.setImageResource(R.drawable.ic_baseline_my_location_white_24);
             fab.show();
         } else if( id == R.id.navigation_contact ){
-            fab.setOnClickListener(v -> contactViewModel.createContact(this));
-            //fab.setOnClickListener(v -> addContact());
-            fab.setImageResource(R.drawable.ic_baseline_person_add_white_24);
             fab.hide();
+            fab.setOnClickListener(v -> contactViewModel.createContact(this));
+            fab.setImageResource(R.drawable.ic_baseline_person_add_white_24);
         }
     }
 
