@@ -46,4 +46,16 @@ public class Utils {
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         MyApp.getContext().startActivity(intent);
     }
+
+    public static boolean contactValid(String alias, String phone){
+        String phoneRegex = "9{1,1}[0-9]{8,8}";
+
+        if( alias.length() < Constantes.PERSON_NAME_LENGTH )
+            return false;
+
+        if( !phone.matches(phoneRegex) )
+            return false;
+
+        return true;
+    }
 }

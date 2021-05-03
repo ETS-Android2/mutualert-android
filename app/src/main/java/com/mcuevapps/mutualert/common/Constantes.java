@@ -13,12 +13,13 @@ public class Constantes {
     public static final String PREF_EMAIL = "PREF_EMAIL";
     public static final String PREF_AVATAR = "PREF_AVATAR";
 
-    // Arguments
+    // CONFIG
     public static final int PHONE_LENGTH = 9;
     public static final int CODE_LENGTH = 6;
     public static final int CODE_RESEND_TIME = 60;
     public static final int PERSON_NAME_LENGTH = 4;
     public static final int PASSWORD_LENGTH = 6;
+    public static final int CONTACT_LENGTH = 5;
 
     // Http Code
     public static final int HTTP_UNAUTHORIZED = 401;
@@ -29,5 +30,8 @@ public class Constantes {
     public static final String ARG_NEW_USER = "NEW_USER";
     public static final String ARG_PHONE = "PHONE";
     public static final String ARG_CODE = "CODE";
-    public static final String ARG_CONTACT_ID = "CONTACT_ID";
+    public static final String ARG_ALERT_CONTACT = "ALERT_CONTACT";
+
+    // Key
+    public static final String KEY_CONTACT = "$CONTACT$";
 }

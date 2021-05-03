@@ -29,7 +29,13 @@
     <string name="code_incorrect">Código ingresado es incorrecto</string>
     <string name="edit_contact">Editar Contacto</string>
     <string name="delete_contact">Eliminar Contacto</string>
+    <string name="success_create_contact">El contacto se ha guardado</string>
+    <string name="success_update_contact">El contacto se ha modificado</string>
     <string name="success_delete_contact">El contacto se ha eliminado</string>
     <string name="cancel">Cancelar</string>
-    <string name="quest_contact_delete">¿Quieres borrar el contacto?</string>
+    <string name="contact_delete_title">¿Quieres borrar el contacto?</string>
+    <string name="contact_delete_message">Se eliminará a \"$CONTACT$\" de tus contactos</string>
+    <string name="alias">Alias</string>
+    <string name="save">Guardar</string>
+    <string name="form_invalid">Revise los campos llenados</string>
 </resources>

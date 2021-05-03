@@ -36,11 +36,6 @@ public class ContactListFragment extends Fragment {
 
     public static ContactListFragment newInstance() {
         ContactListFragment fragment = new ContactListFragment();
-        /*
-        Bundle args = new Bundle();
-        args.putInt(ARG_COLUMN_COUNT, columnCount);
-        fragment.setArguments(args);
-        */
         return fragment;
     }
 
@@ -60,33 +55,32 @@ public class ContactListFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_contact_list, container, false);
 
-        //if (view instanceof RecyclerView) {
-            Context context = view.getContext();
+        Context context = view.getContext();
 
-            swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
-            swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
-            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-                @Override
-                public void onRefresh() {
-                    swipeRefreshLayout.setRefreshing(true);
-                    loadNewData();
-                }
-            });
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setColorSchemeColors(getResources().getColor(R.color.colorAccent));
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                swipeRefreshLayout.setRefreshing(true);
+                loadNewData();
+            }
+        });
 
-            recyclerView = view.findViewById(R.id.list);
-            recyclerView.setLayoutManager(new LinearLayoutManager(context));
-            adapter = new ContactRecyclerViewAdapter(
-                    getActivity(),
-                    contactList
-            );
-            recyclerView.setAdapter(adapter);
-            loadContactData();
-        //}
+        recyclerView = view.findViewById(R.id.list);
+        recyclerView.setLayoutManager(new LinearLayoutManager(context));
+        adapter = new ContactRecyclerViewAdapter(
+                getActivity(),
+                contactList
+        );
+        recyclerView.setAdapter(adapter);
+        loadContactData();
+
         return view;
     }
 
     private void loadContactData() {
-        contactViewModel.getContacts().observe(getActivity(), new Observer<List<AlertContact>>() {
+        contactViewModel.getNewContacts().observe(getActivity(), new Observer<List<AlertContact>>() {
             @Override
             public void onChanged(@Nullable List<AlertContact> contacts) {
                 contactList = contacts;

@@ -30,11 +30,14 @@ public class UIService {
     public static final int BUTTON_RAISED = 3;
 
     public static void showEventToast(String message){
-        showEventToast(TOAST_CARD, message);
+        showEventToast(MyApp.getContext(), TOAST_CARD, message);
     }
 
     public static void showEventToast(int event, String message){
-        Context context = MyApp.getContext();
+        showEventToast(MyApp.getContext(), event, message);
+    }
+
+    public static void showEventToast(Context context, int event, String message){
         int layoutId;
         switch (event){
             case TOAST_SUCCESS:
@@ -77,8 +80,8 @@ public class UIService {
         showDialogConfirm(listener, context, title, "", MyApp.getInstance().getString(R.string.confirm), MyApp.getInstance().getString(R.string.cancel));
     }
 
-    public static void showDialogConfirm(final InterfaceService.successListener listener, Context context, String title, String acceptBtn){
-        showDialogConfirm(listener, context, title, "", acceptBtn, MyApp.getInstance().getString(R.string.cancel));
+    public static void showDialogConfirm(final InterfaceService.successListener listener, Context context, String title, String message){
+        showDialogConfirm(listener, context, title, message, MyApp.getInstance().getString(R.string.confirm), MyApp.getInstance().getString(R.string.cancel));
     }
 
     public static void showDialogConfirm(final InterfaceService.successListener listener, Context context, String title, String message, String acceptBtn){

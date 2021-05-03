@@ -48,7 +48,7 @@ public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecy
             holder.imageViewShowMenu.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    contactViewModel.openDialogContactMenu(ctx, holder.mItem.getId());
+                    contactViewModel.openDialogContactMenu(ctx, holder.mItem);
                 }
             });
         }

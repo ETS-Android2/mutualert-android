@@ -1,5 +1,6 @@
 package com.mcuevapps.mutualert.ui.contacts;
 
+import android.app.Dialog;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -10,20 +11,26 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.navigation.NavigationView;
 import com.mcuevapps.mutualert.R;
 import com.mcuevapps.mutualert.Service.UIService;
+import com.mcuevapps.mutualert.Service.Utils;
 import com.mcuevapps.mutualert.common.Constantes;
 import com.mcuevapps.mutualert.data.ContactViewModel;
+import com.mcuevapps.mutualert.retrofit.response.AlertContact;
 
 public class ContactBottomModalFragment extends BottomSheetDialogFragment {
 
     private static final String TAG = "ContactBottomModalFragment";
 
     private ContactViewModel contactViewModel;
-    private int idContact;
+    private AlertContact contact;
 
     private View view;
     private NavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new NavigationView.OnNavigationItemSelectedListener() {
@@ -34,11 +41,11 @@ public class ContactBottomModalFragment extends BottomSheetDialogFragment {
 
             switch (item.getItemId()) {
                 case R.id.action_edit_Contact:
-                    //edit();
+                    contactViewModel.editContact(getContext(), contact);
                     success = true;
                     break;
                 case R.id.action_delete_Contact:
-                    deleteContact();
+                    contactViewModel.deleteContact(getContext(), contact);
                     success = true;
                     break;
             }
@@ -51,10 +58,10 @@ public class ContactBottomModalFragment extends BottomSheetDialogFragment {
         }
     };
 
-    public static ContactBottomModalFragment newInstance(int idContact) {
+    public static ContactBottomModalFragment newInstance(AlertContact contact) {
         ContactBottomModalFragment fragment = new ContactBottomModalFragment();
         Bundle args = new Bundle();
-        args.putInt(Constantes.ARG_CONTACT_ID, idContact);
+        args.putParcelable(Constantes.ARG_ALERT_CONTACT, contact);
         fragment.setArguments(args);
         return fragment;
     }
@@ -63,7 +70,7 @@ public class ContactBottomModalFragment extends BottomSheetDialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if(getArguments() != null) {
-            idContact = getArguments().getInt(Constantes.ARG_CONTACT_ID);
+            contact = getArguments().getParcelable(Constantes.ARG_ALERT_CONTACT);
         }
     }
 
@@ -85,13 +92,5 @@ public class ContactBottomModalFragment extends BottomSheetDialogFragment {
     private void initUI() {
         final NavigationView nav = view.findViewById(R.id.navigationViewContact);
         nav.setNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-    }
-
-    private void deleteContact(){
-        UIService.showDialogConfirm(success -> {
-            if(success){
-                contactViewModel.deleteContact(idContact);
-            }
-        }, getContext(), getString(R.string.quest_contact_delete));
     }
 }

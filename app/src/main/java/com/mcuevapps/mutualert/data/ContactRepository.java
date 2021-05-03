@@ -7,7 +7,9 @@ import com.mcuevapps.mutualert.Service.UIService;
 import com.mcuevapps.mutualert.common.MyApp;
 import com.mcuevapps.mutualert.retrofit.AuthMutuAlertClient;
 import com.mcuevapps.mutualert.retrofit.AuthMutuAlertService;
+import com.mcuevapps.mutualert.retrofit.request.RequestAlertContact;
 import com.mcuevapps.mutualert.retrofit.response.AlertContact;
+import com.mcuevapps.mutualert.retrofit.response.ResponseAlertContact;
 import com.mcuevapps.mutualert.retrofit.response.ResponseAlertContactList;
 import com.mcuevapps.mutualert.retrofit.response.ResponseSuccess;
 
@@ -44,12 +46,60 @@ public class ContactRepository {
             }
 
             @Override
-            public void onFailure(Call<ResponseAlertContactList> call, Throwable t) {
-                UIService.showEventToast(UIService.TOAST_ERROR, MyApp.getInstance().getString(R.string.error_network));
-            }
+            public void onFailure(Call<ResponseAlertContactList> call, Throwable t) { }
         });
 
         return allContacts;
+    }
+
+    public void createContact(final AlertContact contact) {
+        RequestAlertContact requestAlertContact = new RequestAlertContact(contact.getAlias(), contact.getPhone());
+        Call<ResponseAlertContact> call = authMutuAlertService.createContact(requestAlertContact);
+
+        call.enqueue(new Callback<ResponseAlertContact>() {
+            @Override
+            public void onResponse(Call<ResponseAlertContact> call, Response<ResponseAlertContact> response) {
+                if(response.isSuccessful()) {
+                    List<AlertContact> clonedContacts = new ArrayList<>();
+                    for (int i = 0; i < allContacts.getValue().size(); i++) {
+                        clonedContacts.add(new AlertContact(allContacts.getValue().get(i)));
+                    }
+                    clonedContacts.add(response.body().getData());
+                    allContacts.setValue(clonedContacts);
+                    //getAllContacts();
+                    UIService.showEventToast(UIService.TOAST_SUCCESS, MyApp.getInstance().getString(R.string.success_create_contact));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseAlertContact> call, Throwable t) { }
+        });
+    }
+
+    public void editContact(final AlertContact contact) {
+        RequestAlertContact requestAlertContact = new RequestAlertContact(contact.getAlias(), contact.getPhone());
+        Call<ResponseSuccess> call = authMutuAlertService.updateContact(contact.getId(), requestAlertContact);
+
+        call.enqueue(new Callback<ResponseSuccess>() {
+            @Override
+            public void onResponse(Call<ResponseSuccess> call, Response<ResponseSuccess> response) {
+                if(response.isSuccessful()) {
+                    List<AlertContact> clonedContacts = new ArrayList<>();
+                    for(int i=0; i < allContacts.getValue().size(); i++) {
+                        if(allContacts.getValue().get(i).getId() != contact.getId()) {
+                            clonedContacts.add(new AlertContact(allContacts.getValue().get(i)));
+                        } else {
+                            clonedContacts.add(new AlertContact(contact));
+                        }
+                    }
+                    allContacts.setValue(clonedContacts);
+                    UIService.showEventToast(UIService.TOAST_SUCCESS, MyApp.getInstance().getString(R.string.success_update_contact));
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseSuccess> call, Throwable t) { }
+        });
     }
 
     public void deleteContact(final int idContact) {
@@ -65,17 +115,13 @@ public class ContactRepository {
                             clonedContacts.add(new AlertContact(allContacts.getValue().get(i)));
                         }
                     }
-
                     allContacts.setValue(clonedContacts);
-                    //getAllContacts();
                     UIService.showEventToast(UIService.TOAST_SUCCESS, MyApp.getInstance().getString(R.string.success_delete_contact));
                 }
             }
 
             @Override
-            public void onFailure(Call<ResponseSuccess> call, Throwable t) {
-                UIService.showEventToast(UIService.TOAST_ERROR, MyApp.getInstance().getString(R.string.error_network));
-            }
+            public void onFailure(Call<ResponseSuccess> call, Throwable t) { }
         });
     }
 }
