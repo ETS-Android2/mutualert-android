@@ -149,6 +149,20 @@
         <item name="android:windowTitleStyle">@null</item>
     </style>
 
+    <style name="AlertDialogStyle" parent="@style/Theme.AppCompat.Light.Dialog.Alert">
+        <item name="android:textColor">@color/md_grey_600</item>
+        <item name="buttonBarNegativeButtonStyle">@style/NegativeButtonDefault</item>
+        <item name="buttonBarPositiveButtonStyle">@style/PositiveButtonDefault</item>
+    </style>
+
+    <style name="NegativeButtonDefault" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/colorAccent</item>
+    </style>
+
+    <style name="PositiveButtonDefault" parent="Widget.AppCompat.Button.ButtonBar.AlertDialog">
+        <item name="android:textColor">@color/colorPrimary</item>
+    </style>
+
     <style name="AlertDialogPrimary" parent="@style/Theme.AppCompat.Light.Dialog.Alert">
         <item name="android:textColor">@color/md_white_1000</item>
         <item name="android:textColorPrimary">@color/md_white_1000</item>

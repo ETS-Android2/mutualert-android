@@ -1,7 +1,7 @@
 package com.mcuevapps.mutualert.Service;
 
 import android.content.Context;
-import android.content.DialogInterface;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,6 +29,10 @@ public class UIService {
     public static final int BUTTON_PRIMARY = 1;
     public static final int BUTTON_SECONDARY = 2;
     public static final int BUTTON_RAISED = 3;
+
+    public static final int DIALOG_DEFAULT = 1;
+    public static final int DIALOG_PRIMARY = 2;
+    public static final int DIALOG_SECONDARY = 3;
 
     public static void showEventToast(String message){
         showEventToast(MyApp.getContext(), TOAST_CARD, message);
@@ -76,40 +81,55 @@ public class UIService {
         });
     }
 
-    public static void showDialogConfirm(final InterfaceService.successListener listener, Context context, String title){
-        showDialogConfirm(listener, context, title, "", MyApp.getInstance().getString(R.string.confirm), MyApp.getInstance().getString(R.string.cancel));
+    public static void showDialogConfirm(final InterfaceService.successListener listener, Context context, int style, String title){
+        showDialogConfirm(listener, context, style, title, "", MyApp.getInstance().getString(R.string.confirm), MyApp.getInstance().getString(R.string.cancel));
     }
 
-    public static void showDialogConfirm(final InterfaceService.successListener listener, Context context, String title, String message){
-        showDialogConfirm(listener, context, title, message, MyApp.getInstance().getString(R.string.confirm), MyApp.getInstance().getString(R.string.cancel));
+    public static void showDialogConfirm(final InterfaceService.successListener listener, Context context, int style, String title, String message){
+        showDialogConfirm(listener, context, style, title, message, MyApp.getInstance().getString(R.string.confirm), MyApp.getInstance().getString(R.string.cancel));
     }
 
-    public static void showDialogConfirm(final InterfaceService.successListener listener, Context context, String title, String message, String acceptBtn){
-        showDialogConfirm(listener, context, title, message, acceptBtn, MyApp.getInstance().getString(R.string.cancel));
+    public static void showDialogConfirm(final InterfaceService.successListener listener, Context context, int style, String title, String message, String acceptBtn){
+        showDialogConfirm(listener, context, style, title, message, acceptBtn, MyApp.getInstance().getString(R.string.cancel));
     }
 
-    public static void showDialogConfirm(final InterfaceService.successListener listener, Context context,  String title, String message, String confirmBtn, String cancelBtn){
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+    public static void showDialogConfirm(final InterfaceService.successListener listener, Context context, int style, String title, String message, String confirmBtn, String cancelBtn){
+
+        int styleId;
+        switch (style){
+            case DIALOG_PRIMARY:
+                styleId = R.style.AlertDialogPrimary;
+                break;
+            case DIALOG_SECONDARY:
+                styleId = R.style.AlertDialogAccent;
+                break;
+            default:
+                styleId = R.style.AlertDialogStyle;
+                break;
+        }
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, styleId);
         builder.setTitle(title);
         if( !TextUtils.isEmpty(message) ){
             builder.setMessage(message);
         }
-        builder.setPositiveButton(confirmBtn, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                listener.response(true);
-                dialog.dismiss();
-            }
+        builder.setPositiveButton(confirmBtn, (dialog, id) -> {
+            listener.response(true);
+            dialog.dismiss();
         });
-        builder.setNegativeButton(cancelBtn, new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog, int id) {
-                listener.response(false);
-                dialog.dismiss();
-            }
+        builder.setNegativeButton(cancelBtn, (dialog, id) -> {
+            listener.response(false);
+            dialog.dismiss();
         });
         builder.setIcon(R.drawable.ic_baseline_warning_black_24);
 
         AlertDialog dialog = builder.create();
         dialog.show();
+
+        ImageView imageView = dialog.findViewById(android.R.id.icon);
+        if (imageView != null) {
+            imageView.setColorFilter(Color.parseColor("#E4CC40"), android.graphics.PorterDuff.Mode.SRC_IN);
+        }
     }
 
     public static void ButtonEnable(int type, Button button){

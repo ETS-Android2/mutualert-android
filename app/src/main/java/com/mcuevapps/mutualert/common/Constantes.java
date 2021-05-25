@@ -19,7 +19,7 @@ public class Constantes {
     public static final int CODE_RESEND_TIME = 60;
     public static final int PERSON_NAME_LENGTH = 4;
     public static final int PASSWORD_LENGTH = 6;
-    public static final int CONTACT_LENGTH = 5;
+    public static final int CONTACT_LENGTH = 4;
 
     // Http Code
     public static final int HTTP_UNAUTHORIZED = 401;

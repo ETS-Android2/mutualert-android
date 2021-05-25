@@ -38,4 +38,7 @@
     <string name="alias">Alias</string>
     <string name="save">Guardar</string>
     <string name="form_invalid">Revise los campos llenados</string>
+    <string name="permission_location">Esta aplicación necesita saber tu ubicación</string>
+    <string name="ok">Ok</string>
+    <string name="deny">Denegar</string>
 </resources>

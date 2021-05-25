@@ -31,6 +31,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private TextView textViewToolbar;
     private FloatingActionButton fab;
+    private String currentFragment;
 
     private ContactViewModel contactViewModel;
 
@@ -48,11 +49,9 @@ public class HomeActivity extends AppCompatActivity {
                     fragment = new ContactListFragment();
                     break;
             }
-
-            FragmentManager fm = getSupportFragmentManager();
-            Fragment currentFragment = fm.findFragmentById(R.id.frameLayout);
-            if( fragment != null && !fragment.getClass().toString().equals(currentFragment.getTag()) ) {
-                fabToFragment(id);
+            if( fragment != null && !currentFragment.equals(fragment.getClass().toString()) ) {
+                currentFragment = fragment.getClass().toString();
+                fabDefault();
 
                 getSupportFragmentManager()
                         .beginTransaction()
@@ -62,7 +61,6 @@ public class HomeActivity extends AppCompatActivity {
                 UIService.showEventToast(item.getTitle().toString());
                 return true;
             }
-
             return false;
         }
     };
@@ -85,7 +83,7 @@ public class HomeActivity extends AppCompatActivity {
         textViewToolbar = findViewById(R.id.textViewToolbar);
 
         fab = findViewById(R.id.fab);
-        fab.setOnClickListener(v -> sendAlert());
+        fabDefault();
 
         BottomAppBar bottomAppBar = findViewById(R.id.bottomAppBar);
         bottomAppBar.setOnMenuItemClickListener(mOnMenuItemClickListener);
@@ -101,6 +99,7 @@ public class HomeActivity extends AppCompatActivity {
                 .beginTransaction()
                 .add(R.id.frameLayout, fragment, fragment.getClass().toString())
                 .commit();
+        currentFragment = fragment.getClass().toString();
 
         loadContactData();
     }
@@ -109,25 +108,19 @@ public class HomeActivity extends AppCompatActivity {
         contactViewModel.getContacts().observe(this, new Observer<List<AlertContact>>() {
             @Override
             public void onChanged(@Nullable List<AlertContact> contacts) {
-                if( contacts.size()<Constantes.CONTACT_LENGTH ){
-                    fab.show();
+                if(currentFragment.equals(new ContactListFragment().getClass().toString()) && contacts.size()<Constantes.CONTACT_LENGTH){
+                    fab.setImageResource(R.drawable.ic_baseline_person_add_white_24);
+                    fab.setOnClickListener(v -> contactViewModel.createContact((HomeActivity.this)));
                 } else {
-                    fab.hide();
+                    fabDefault();
                 }
             }
         });
     }
 
-    private void fabToFragment(int id){
-        if( id == R.id.navigation_dashboard ){
-            fab.setOnClickListener(v -> sendAlert());
-            fab.setImageResource(R.drawable.ic_baseline_my_location_white_24);
-            fab.show();
-        } else if( id == R.id.navigation_contact ){
-            fab.hide();
-            fab.setOnClickListener(v -> contactViewModel.createContact(this));
-            fab.setImageResource(R.drawable.ic_baseline_person_add_white_24);
-        }
+    private void fabDefault(){
+        fab.setImageResource(R.drawable.ic_baseline_my_location_white_24);
+        fab.setOnClickListener(v -> sendAlert());
     }
 
     private void setToolbarText(String text){

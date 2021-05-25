@@ -99,6 +99,6 @@ public class ContactViewModel extends AndroidViewModel {
             if(success){
                 contactRepository.deleteContact(contact.getId());
             }
-        }, ctx, MyApp.getInstance().getString(R.string.contact_delete_title), MyApp.getInstance().getString(R.string.contact_delete_message).replace(Constantes.KEY_CONTACT, contact.getAlias()));
+        }, ctx, UIService.DIALOG_SECONDARY, MyApp.getInstance().getString(R.string.contact_delete_title), MyApp.getInstance().getString(R.string.contact_delete_message).replace(Constantes.KEY_CONTACT, contact.getAlias()));
     }
 }

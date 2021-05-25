@@ -2,14 +2,22 @@ package com.mcuevapps.mutualert.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
 import android.animation.Animator;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.karumi.dexter.Dexter;
+import com.karumi.dexter.PermissionToken;
+import com.karumi.dexter.listener.PermissionDeniedResponse;
+import com.karumi.dexter.listener.PermissionGrantedResponse;
+import com.karumi.dexter.listener.PermissionRequest;
+import com.karumi.dexter.listener.single.PermissionListener;
 import com.mcuevapps.mutualert.R;
+import com.mcuevapps.mutualert.Service.UIService;
 import com.mcuevapps.mutualert.Service.Utils;
 import com.mcuevapps.mutualert.common.Constantes;
 import com.mcuevapps.mutualert.common.SharedPreferencesManager;
@@ -21,13 +29,17 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class SplashScreenActivity extends AppCompatActivity {
+public class SplashScreenActivity extends AppCompatActivity implements PermissionListener {
 
     private static final String TAG = "SplashScreenActivity";
 
     private ImageView iconImageView;
     private TextView nameTextView;
-    private Boolean isRunning = false;
+    private boolean isRunning = false;
+    private boolean inReqPermission = true;
+    private boolean permission;
+    private boolean existToken;
+    private boolean inRequest;
 
     private AuthMutuAlertClient authMutuAlertClient;
     private AuthMutuAlertService authMutuAlertService;
@@ -43,6 +55,14 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if(!permission && !inReqPermission){
+            checkPermission();
+        }
+    }
+
     private void retrofitInit() {
         authMutuAlertClient = AuthMutuAlertClient.getInstance();
         authMutuAlertService = authMutuAlertClient.getAuthMutuAlertService();
@@ -51,6 +71,7 @@ public class SplashScreenActivity extends AppCompatActivity {
     private void initUI() {
         iconImageView = findViewById(R.id.iconImageView);
         nameTextView = findViewById(R.id.nameTextView);
+        verifyToken();
     }
 
     @Override
@@ -59,24 +80,10 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         if(!isRunning) {
             isRunning = true;
-            int width = Resources.getSystem().getDisplayMetrics().widthPixels;
-            int height = Resources.getSystem().getDisplayMetrics().heightPixels;
-
-            int halfWidth = width / 2;
-            int halfHeight = height / 2;
-
-            int px50 = Utils.dpToPx(this, 50);
-            int px20 = Utils.dpToPx(this, 20);
-            int px90 = Utils.dpToPx(this, 90);
-
-            int iconToX = halfWidth - px50;
-            int iconToY = halfHeight - px90;
 
             iconImageView.animate().scaleX(4).scaleY(4).alpha(0).setDuration(0).setListener(new Animator.AnimatorListener() {
                 @Override
-                public void onAnimationStart(Animator animator) {
-
-                }
+                public void onAnimationStart(Animator animator) { }
 
                 @Override
                 public void onAnimationEnd(Animator animator) {
@@ -93,7 +100,7 @@ public class SplashScreenActivity extends AppCompatActivity {
 
                                 @Override
                                 public void onAnimationEnd(Animator animator) {
-                                    verifyToken();
+                                    checkPermission();
                                 }
 
                                 @Override
@@ -123,30 +130,75 @@ public class SplashScreenActivity extends AppCompatActivity {
         }
     }
 
+    private void checkPermission(){
+        permission = false;
+        Dexter.withContext(this)
+            .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+            .withListener(this)
+            .check();
+    }
+
     private void verifyToken(){
         String token = SharedPreferencesManager.getSomeStringValue(Constantes.PREF_TOKEN);
         if ( TextUtils.isEmpty(token) ) {
-            Utils.goToLogin();
-            this.finish();
+            existToken = false;
+            inRequest = false;
         }else{
             authToken();
         }
     }
-
     private void authToken(){
+        inRequest = true;
         Call<ResponseUserAuthSuccess> call = authMutuAlertService.token();
         call.enqueue(new Callback<ResponseUserAuthSuccess>() {
             @Override
             public void onResponse(Call<ResponseUserAuthSuccess> call, Response<ResponseUserAuthSuccess> response) {
                 if( response.isSuccessful() ){
+                    inRequest = false;
                     Utils.saveDataLogin(response.body().getData());
-                    Utils.goToHome();
-                    SplashScreenActivity.this.finish();
+                    existToken = true;
+                    changeActivity();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseUserAuthSuccess> call, Throwable t) { }
         });
+    }
+
+    private void changeActivity(){
+        if(!permission || inRequest){
+            return;
+        }
+
+        if(existToken){
+            Utils.goToHome();
+        } else {
+            Utils.goToLogin();
+        }
+        SplashScreenActivity.this.finish();
+    }
+
+    @Override
+    public void onPermissionGranted(PermissionGrantedResponse response) {
+        permission = true;
+        changeActivity();
+    }
+
+    @Override
+    public void onPermissionDenied(PermissionDeniedResponse response) {
+        inReqPermission = false;
+        moveTaskToBack(true);
+    }
+
+    @Override
+    public void onPermissionRationaleShouldBeShown(PermissionRequest request, PermissionToken token) {
+        UIService.showDialogConfirm(success -> {
+            if(success){
+                token.continuePermissionRequest();
+            } else {
+                token.cancelPermissionRequest();
+            }
+        }, this, UIService.DIALOG_DEFAULT, getString(R.string.permission_location), "",  getString(R.string.ok), getString(R.string.deny));
     }
 }
