@@ -64,12 +64,14 @@ public class HomeActivity extends AppCompatActivity {
             LocationService.LocalBinder binder = (LocationService.LocalBinder) service;
             mService = binder.getService();
             mBound = true;
+            Log.i(TAG, "onServiceConnected");
         }
 
         @Override
         public void onServiceDisconnected(ComponentName name) {
             mService = null;
             mBound = false;
+            Log.i(TAG, "onServiceDisconnected");
         }
     };
 

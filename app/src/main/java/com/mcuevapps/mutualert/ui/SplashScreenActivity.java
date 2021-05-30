@@ -23,6 +23,7 @@ import com.mcuevapps.mutualert.common.Constantes;
 import com.mcuevapps.mutualert.common.SharedPreferencesManager;
 import com.mcuevapps.mutualert.retrofit.AuthMutuAlertClient;
 import com.mcuevapps.mutualert.retrofit.AuthMutuAlertService;
+import com.mcuevapps.mutualert.retrofit.response.ResponseSuccess;
 import com.mcuevapps.mutualert.retrofit.response.ResponseUserAuthSuccess;
 
 import retrofit2.Call;
@@ -155,6 +156,23 @@ public class SplashScreenActivity extends AppCompatActivity implements Permissio
             public void onResponse(Call<ResponseUserAuthSuccess> call, Response<ResponseUserAuthSuccess> response) {
                 if( response.isSuccessful() ){
                     inRequest = false;
+                    if(response.body().getData().getAlert() && !SharedPreferencesManager.getSomeBooleanValue(Constantes.PREF_ALERT_APP, false)) {
+                        inRequest = true;
+                        Call<ResponseSuccess> callStop = authMutuAlertService.stopEmergency();
+                        callStop.enqueue(new Callback<ResponseSuccess>() {
+                            @Override
+                            public void onResponse(Call<ResponseSuccess> call, Response<ResponseSuccess> response) {
+                                if(response.isSuccessful() && response.body().getSuccess()){
+                                    inRequest = false;
+                                    SharedPreferencesManager.setSomeBooleanValue(Constantes.PREF_ALERT_API, false);
+                                    changeActivity();
+                                }
+                            }
+
+                            @Override
+                            public void onFailure(Call<ResponseSuccess> call, Throwable t) { }
+                        });
+                    }
                     Utils.saveDataLogin(response.body().getData());
                     existToken = true;
                     changeActivity();

@@ -32,7 +32,7 @@ public class AuthInterceptor implements Interceptor{
                 UIService.showEventToast(UIService.TOAST_ERROR, MyApp.getInstance().getString(R.string.error_response));
             }
         } catch (Exception e) {
-            UIService.showEventToast(UIService.TOAST_ERROR, MyApp.getInstance().getString(R.string.error_network));
+            UIService.showEventToast(UIService.TOAST_WARNING, MyApp.getInstance().getString(R.string.error_network));
         }
         return response;
     }

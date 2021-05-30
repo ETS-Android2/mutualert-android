@@ -28,7 +28,16 @@ import com.mcuevapps.mutualert.R;
 import com.mcuevapps.mutualert.common.Constantes;
 import com.mcuevapps.mutualert.common.MyApp;
 import com.mcuevapps.mutualert.common.SharedPreferencesManager;
+import com.mcuevapps.mutualert.model.Point;
+import com.mcuevapps.mutualert.retrofit.AuthMutuAlertClient;
+import com.mcuevapps.mutualert.retrofit.AuthMutuAlertService;
+import com.mcuevapps.mutualert.retrofit.request.RequestUserStateLocation;
+import com.mcuevapps.mutualert.retrofit.response.ResponseSuccess;
 import com.mcuevapps.mutualert.ui.HomeActivity;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 public class LocationService extends Service {
 
@@ -97,8 +106,38 @@ public class LocationService extends Service {
     }
 
     private void onNewLocation(Location location) {
+        if(!SharedPreferencesManager.getSomeBooleanValue(Constantes.PREF_ALERT_APP, false)){
+            return;
+        }
         mLocation = location;
-        Log.i(TAG, "Service NewLocation: ("+mLocation.getLatitude()+" , "+mLocation.getLongitude()+")");
+        AuthMutuAlertClient authMutuAlertClient = AuthMutuAlertClient.getInstance();;
+        AuthMutuAlertService authMutuAlertService = authMutuAlertClient.getAuthMutuAlertService();
+        RequestUserStateLocation requestUserStateLocation = new RequestUserStateLocation(String.valueOf(mLocation.getLatitude()), String.valueOf(mLocation.getLongitude()), String.valueOf(mLocation.getAccuracy()));
+
+        if( SharedPreferencesManager.getSomeBooleanValue(Constantes.PREF_ALERT_API, false) ){
+            Call<ResponseSuccess> call = authMutuAlertService.sendLocation(requestUserStateLocation);
+            call.enqueue(new Callback<ResponseSuccess>() {
+                @Override
+                public void onResponse(Call<ResponseSuccess> call, Response<ResponseSuccess> response) { }
+
+                @Override
+                public void onFailure(Call<ResponseSuccess> call, Throwable t) { }
+            });
+        }else{
+            Call<ResponseSuccess> call = authMutuAlertService.startEmergency(requestUserStateLocation);
+            call.enqueue(new Callback<ResponseSuccess>() {
+                @Override
+                public void onResponse(Call<ResponseSuccess> call, Response<ResponseSuccess> response) {
+                    if(response.isSuccessful() && response.body().getSuccess())
+                        SharedPreferencesManager.setSomeBooleanValue(Constantes.PREF_ALERT_API, true);
+                }
+
+                @Override
+                public void onFailure(Call<ResponseSuccess> call, Throwable t) { }
+            });
+        }
+        String strMLocation = "( " + mLocation.getLatitude() + " , " + mLocation.getLongitude() + " , " + mLocation.getAccuracy() + " )";
+        Log.i(TAG, "Service NewLocation: "+strMLocation);
     }
 
     private void createLocationRequest() {
@@ -144,8 +183,9 @@ public class LocationService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Service in onBind()");
-        stopForeground(true);
-        mChangingConfiguration = false;
+        if(SharedPreferencesManager.getSomeBooleanValue(Constantes.PREF_ALERT_APP, false)){
+            requestLocationUpdates();
+        }
         return mBinder;
     }
 
@@ -186,6 +226,19 @@ public class LocationService extends Service {
             mFusedLocationClient.removeLocationUpdates(mLocationCallback);
             SharedPreferencesManager.setSomeBooleanValue(Constantes.PREF_ALERT_APP, false);
             stopSelf();
+            AuthMutuAlertClient authMutuAlertClient = AuthMutuAlertClient.getInstance();;
+            AuthMutuAlertService authMutuAlertService = authMutuAlertClient.getAuthMutuAlertService();
+            Call<ResponseSuccess> call = authMutuAlertService.stopEmergency();
+            call.enqueue(new Callback<ResponseSuccess>() {
+                @Override
+                public void onResponse(Call<ResponseSuccess> call, Response<ResponseSuccess> response) {
+                    if(response.isSuccessful() && response.body().getSuccess())
+                    SharedPreferencesManager.setSomeBooleanValue(Constantes.PREF_ALERT_API, false);
+                }
+
+                @Override
+                public void onFailure(Call<ResponseSuccess> call, Throwable t) { }
+            });
         } catch (SecurityException unlikely) {
             Log.e(TAG, "Service lost location permission. Could not remove updates. " + unlikely);
         }

@@ -40,12 +40,11 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
 
             List<Location> mLocations = result.getLocations();
             Location lastLocation = mLocations.get(mLocations.size() - 1);
-            Point point = new Point(lastLocation.getLatitude(), lastLocation.getLongitude(), lastLocation.getAccuracy());
 
             AuthMutuAlertClient authMutuAlertClient = AuthMutuAlertClient.getInstance();;
             AuthMutuAlertService authMutuAlertService = authMutuAlertClient.getAuthMutuAlertService();
 
-            RequestUserStateLocation requestUserStateLocation = new RequestUserStateLocation(String.valueOf(point.getLatitude()), String.valueOf(point.getLongitude()), String.valueOf(point.getAccuracy()));
+            RequestUserStateLocation requestUserStateLocation = new RequestUserStateLocation(String.valueOf(lastLocation.getLatitude()), String.valueOf(lastLocation.getLongitude()), String.valueOf(lastLocation.getAccuracy()));
             Call<ResponseSuccess> call = authMutuAlertService.sendLocation(requestUserStateLocation);
             call.enqueue(new Callback<ResponseSuccess>() {
                  @Override
@@ -55,8 +54,8 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
                  public void onFailure(Call<ResponseSuccess> call, Throwable t) { }
              });
 
-            String strPoint = "( " + point.getLatitude() + " , " + point.getLongitude() + " , " + point.getAccuracy() + " )";
-            Log.i(TAG, "Receiver LocationUpdate: "+strPoint);
+            String strLastLocation = "( " + lastLocation.getLatitude() + " , " + lastLocation.getLongitude() + " , " + lastLocation.getAccuracy() + " )";
+            Log.i(TAG, "Receiver LocationUpdate: "+strLastLocation);
         } else if ( action.equals(Intent.ACTION_BOOT_COMPLETED) ) {
             Intent serviceIntent = new Intent(context, LocationService.class);
             serviceIntent.putExtra(LocationService.EXTRA_STARTED_FROM_BOOT, true);

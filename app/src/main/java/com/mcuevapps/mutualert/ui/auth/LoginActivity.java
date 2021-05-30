@@ -19,6 +19,7 @@ import com.mcuevapps.mutualert.common.SharedPreferencesManager;
 import com.mcuevapps.mutualert.retrofit.MutuAlertClient;
 import com.mcuevapps.mutualert.retrofit.MutuAlertService;
 import com.mcuevapps.mutualert.retrofit.request.RequestUserAuthLogin;
+import com.mcuevapps.mutualert.retrofit.response.ResponseSuccess;
 import com.mcuevapps.mutualert.retrofit.response.ResponseUserAuthSuccess;
 
 import retrofit2.Call;
@@ -105,6 +106,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             public void onResponse(Call<ResponseUserAuthSuccess> call, Response<ResponseUserAuthSuccess> response) {
                 if( response.isSuccessful() ){
                     SharedPreferencesManager.setSomeStringValue(Constantes.PREF_USERNAME, editTextPhone.getText().toString());
+                    if(response.body().getData().getAlert()) {
+                        SharedPreferencesManager.setSomeBooleanValue(Constantes.PREF_ALERT_APP, true);
+                    }
                     Utils.saveDataLogin(response.body().getData());
                     Utils.goToHome();
                     LoginActivity.this.finish();
