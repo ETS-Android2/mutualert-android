@@ -58,14 +58,13 @@ public class LocationBroadcastReceiver extends BroadcastReceiver {
             String strPoint = "( " + point.getLatitude() + " , " + point.getLongitude() + " , " + point.getAccuracy() + " )";
             Log.i(TAG, "Receiver LocationUpdate: "+strPoint);
         } else if ( action.equals(Intent.ACTION_BOOT_COMPLETED) ) {
-            /*
-            Intent i = new Intent(context, LocationService.class);
+            Intent serviceIntent = new Intent(context, LocationService.class);
+            serviceIntent.putExtra(LocationService.EXTRA_STARTED_FROM_BOOT, true);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context.startForegroundService(i);
+                context.startForegroundService(serviceIntent);
             } else {
-                context.startService(i);
+                context.startService(serviceIntent);
             }
-            */
         }
     }
 }

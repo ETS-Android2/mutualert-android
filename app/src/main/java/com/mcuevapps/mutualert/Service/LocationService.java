@@ -17,7 +17,6 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -25,8 +24,6 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.mcuevapps.mutualert.R;
 import com.mcuevapps.mutualert.common.Constantes;
 import com.mcuevapps.mutualert.common.MyApp;
@@ -38,7 +35,7 @@ public class LocationService extends Service {
     private static final String TAG = LocationService.class.getSimpleName();
 
     private static final String PACKAGE_NAME = "com.mcuevapps.mutualert.Service";
-    //private static final String EXTRA_STARTED_FROM_NOTIFICATION = PACKAGE_NAME +".started_from_notification";
+    public static final String EXTRA_STARTED_FROM_BOOT = PACKAGE_NAME +".started_from_boot";
     private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
     private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2;
 
@@ -89,15 +86,13 @@ public class LocationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "Service onStartCommand");
-        /*
-        boolean startedFromNotification = intent.getBooleanExtra(EXTRA_STARTED_FROM_NOTIFICATION,
-                false);
 
-        if (startedFromNotification) {
-            removeLocationUpdates();
-            stopSelf();
+        boolean startedFromBoot = intent.getBooleanExtra(EXTRA_STARTED_FROM_BOOT,
+                false);
+        if (startedFromBoot && SharedPreferencesManager.getSomeBooleanValue(Constantes.PREF_ALERT_APP, false)) {
+            createNotificationManager();
+            startForeground(NOTIFICATION_ID, getNotification());
         }
-        */
         return START_NOT_STICKY;
     }
 
@@ -107,7 +102,7 @@ public class LocationService extends Service {
     }
 
     private void createLocationRequest() {
-        mLocationRequest = new LocationRequest();
+        mLocationRequest = LocationRequest.create();
         mLocationRequest.setInterval(UPDATE_INTERVAL_IN_MILLISECONDS);
         mLocationRequest.setFastestInterval(FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);

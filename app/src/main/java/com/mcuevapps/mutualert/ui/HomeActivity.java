@@ -127,7 +127,7 @@ public class HomeActivity extends AppCompatActivity {
     }
 
     private void createLocationRequest() {
-        mLocationRequest = new LocationRequest();
+        mLocationRequest = LocationRequest.create();
         mLocationRequest.setInterval(Constantes.LOCATION_UPDATE_INTERVAL);
         mLocationRequest.setFastestInterval(Constantes.LOCATION_FASTEST_UPDATE_INTERVAL);
         mLocationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
