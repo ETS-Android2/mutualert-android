@@ -19,7 +19,7 @@
         app:icon_margin="5dp"
         app:outer_color="@color/md_grey_100"
         app:inner_color="@color/colorAccent"
-        app:text="EMERGENCIA"
+        app:text="@string/emergency_slide"
         app:text_size="@dimen/font_h5_size"
         app:text_style="bold"
         app:slider_icon="@drawable/ic_baseline_my_location_white_24"

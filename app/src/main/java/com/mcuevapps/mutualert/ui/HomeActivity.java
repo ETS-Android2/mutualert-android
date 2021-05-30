@@ -198,7 +198,8 @@ public class HomeActivity extends AppCompatActivity {
                 if(success){
                     sendAlert(false);
                 }
-            }, this, UIService.DIALOG_SECONDARY, "Quieres iniciar la emergencia");
+            }, this, UIService.DIALOG_SECONDARY, getString(R.string.emergency_dialog_title),
+                    getString(R.string.emergency_dialog_message), getString(R.string.emergency_dialog_confirm), getString(R.string.emergency_dialog_cancel));
         }else{
             removeLocationUpdates();
             hideAppBarFab();

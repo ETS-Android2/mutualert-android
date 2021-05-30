@@ -124,12 +124,12 @@ public class LocationService extends Service {
 
         Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
                 .setContentTitle(MyApp.getInstance().getString(R.string.emergency_notification_title))
-                .setContentText(MyApp.getInstance().getString(R.string.emergency_notification_text))
+                .setContentText(MyApp.getInstance().getString(R.string.emergency_notification_message))
                 .setContentIntent(pendingIntent)
                 .setOngoing(true)
                 .setPriority(Notification.PRIORITY_DEFAULT)
-                .setSmallIcon(R.drawable.ic_baseline_dashboard_white_36)
-                .setTicker(MyApp.getInstance().getString(R.string.emergency_notification_text))
+                .setSmallIcon(R.drawable.icon_mutualert_notification)
+                .setTicker(MyApp.getInstance().getString(R.string.emergency_notification_message))
                 .build();
 
         return notification;

@@ -37,7 +37,7 @@ public class EmergencyFragment extends Fragment {
     private void initUI() {
         slideToActView = view.findViewById(R.id.slideToActView);
         slideToActView.setOnSlideCompleteListener(slideToActView -> {
-            UIService.showEventToast(UIService.TOAST_SUCCESS, "Alerta finalizada");
+            UIService.showEventToast(UIService.TOAST_SUCCESS, getString(R.string.emergency_stop_success));
             ((HomeActivity) getActivity()).stopAlert();
         });
     }

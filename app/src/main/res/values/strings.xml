@@ -41,6 +41,12 @@
     <string name="permission_location">Esta aplicación necesita saber tu ubicación</string>
     <string name="ok">Ok</string>
     <string name="deny">Denegar</string>
-    <string name="emergency_notification_title">Emergencia Activada</string>
-    <string name="emergency_notification_text">Estamos enviando su ubicación</string>
+    <string name="emergency_notification_title">¡Emergencia Activada!</string>
+    <string name="emergency_notification_message">Notificando constantemente su ubicación</string>
+    <string name="emergency_slide">¡EMERGENCIA!</string>
+    <string name="emergency_dialog_title">¿Quieres solicitar ayuda?</string>
+    <string name="emergency_dialog_message">Notificaremos a sus contactos y a las personas cercanas</string>
+    <string name="emergency_dialog_confirm">Sí, ayudenme</string>
+    <string name="emergency_dialog_cancel">No</string>
+    <string name="emergency_stop_success">Emergencia finalizada</string>
 </resources>
