@@ -21,6 +21,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class ContactRepository {
+
+    private static final String TAG = ContactRepository.class.getSimpleName();
+
     AuthMutuAlertService authMutuAlertService;
     AuthMutuAlertClient authMutuAlertClient;
     MutableLiveData<List<AlertContact>> allContacts;

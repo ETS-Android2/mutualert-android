@@ -1,6 +1,7 @@
 package com.mcuevapps.mutualert.retrofit;
 
 import com.mcuevapps.mutualert.retrofit.request.RequestAlertContact;
+import com.mcuevapps.mutualert.retrofit.request.RequestUserStateLocation;
 import com.mcuevapps.mutualert.retrofit.response.ResponseAlertContact;
 import com.mcuevapps.mutualert.retrofit.response.ResponseAlertContactList;
 import com.mcuevapps.mutualert.retrofit.response.ResponseSuccess;
@@ -19,6 +20,10 @@ public interface AuthMutuAlertService {
     @GET("user/auth/token")
     Call<ResponseUserAuthSuccess> token();
 
+    /** User State **/
+    @POST("user/state/location")
+    Call<ResponseSuccess> sendLocation(@Body RequestUserStateLocation requestUserStateLocation);
+
     /** Alert Contact **/
     @GET("alert/contact/l")
     Call<ResponseAlertContactList> getAllContacts();
@@ -34,4 +39,11 @@ public interface AuthMutuAlertService {
 
     @DELETE("alert/contact/d/{idContact}")
     Call<ResponseSuccess> deleteContact(@Path("idContact") int idContact);
+
+    /** Alert Emergency **/
+    @POST("alert/emergency/start")
+    Call<ResponseSuccess> startEmergency(@Body RequestUserStateLocation requestUserStateLocation);
+
+    @POST("alert/emergency/stop")
+    Call<ResponseSuccess> stopEmergency();
 }

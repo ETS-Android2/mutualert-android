@@ -16,7 +16,7 @@ import com.mcuevapps.mutualert.Service.Utils;
 
 public class HomeBottomModalFragment extends BottomSheetDialogFragment {
 
-    private static final String TAG = "HomeBottomModalFragment";
+    private static final String TAG = HomeBottomModalFragment.class.getSimpleName();
 
     private View view;
 
@@ -58,6 +58,7 @@ public class HomeBottomModalFragment extends BottomSheetDialogFragment {
     public void logout(){
         Utils.removeDataLogin();
         Utils.goToLogin();
+        ((HomeActivity) getActivity()).removeLocationUpdates();
         getActivity().finish();
     }
 }

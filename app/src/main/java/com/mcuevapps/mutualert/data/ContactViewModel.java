@@ -26,6 +26,9 @@ import com.mcuevapps.mutualert.ui.contacts.ContactBottomModalFragment;
 import java.util.List;
 
 public class ContactViewModel extends AndroidViewModel {
+
+    private static final String TAG = ContactViewModel.class.getSimpleName();
+
     private ContactRepository contactRepository;
     private LiveData<List<AlertContact>> contacts;
 

@@ -40,7 +40,7 @@ import retrofit2.Response;
 
 public class RegisterCodeFragment extends Fragment implements View.OnClickListener, TextWatcher {
 
-    private static final String TAG = "RegisterCodeFragment";
+    private static final String TAG = RegisterCodeFragment.class.getSimpleName();
 
     private FirebaseAuth mAuth;
 

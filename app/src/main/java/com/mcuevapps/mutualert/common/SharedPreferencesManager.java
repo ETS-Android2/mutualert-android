@@ -30,8 +30,8 @@ public class SharedPreferencesManager {
         return getSharedPreferences().getString(dataLabel, null);
     }
 
-    public static boolean getSomeBooleanValue(String dataLabel) {
-        return getSharedPreferences().getBoolean(dataLabel, false);
+    public static boolean getSomeBooleanValue(String dataLabel, boolean defValue) {
+        return getSharedPreferences().getBoolean(dataLabel, defValue);
     }
 
     public static void deleteSomeValue(String dataLabel) {

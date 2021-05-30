@@ -27,7 +27,7 @@ import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener, TextWatcher {
 
-    private static final String TAG = "LoginActivity";
+    private static final String TAG = LoginActivity.class.getSimpleName();
 
     private TextInputEditText editTextPhone;
     private TextInputEditText editTextPassword;

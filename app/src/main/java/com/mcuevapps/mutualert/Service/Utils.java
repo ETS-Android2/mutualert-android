@@ -13,6 +13,7 @@ import com.mcuevapps.mutualert.ui.auth.LoginActivity;
 public class Utils {
     public static void saveDataLogin(UserAuthSuccess data){
         SharedPreferencesManager.setSomeStringValue(Constantes.PREF_TOKEN, data.getToken());
+        SharedPreferencesManager.setSomeBooleanValue(Constantes.PREF_ALERT_API, data.getAlert());
         SharedPreferencesManager.setSomeStringValue(Constantes.PREF_APELLIDOPAT, data.getProfile().getApepat());
         SharedPreferencesManager.setSomeStringValue(Constantes.PREF_APELLIDOMAT, data.getProfile().getApemat());
         SharedPreferencesManager.setSomeStringValue(Constantes.PREF_NOMBRES, data.getProfile().getNombres());

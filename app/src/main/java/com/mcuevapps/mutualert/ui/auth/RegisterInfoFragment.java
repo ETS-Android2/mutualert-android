@@ -31,7 +31,7 @@ import retrofit2.Response;
 
 public class RegisterInfoFragment extends Fragment implements View.OnClickListener, TextWatcher {
 
-    private static final String TAG = "RegisterInfoFragment";
+    private static final String TAG = RegisterInfoFragment.class.getSimpleName();
 
     private View view;
 

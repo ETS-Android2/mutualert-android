@@ -68,6 +68,8 @@
                             android:textAllCaps="true"
                             android:textColor="@color/md_grey_500"
                             android:textSize="@dimen/font_body_size"
+                            app:endIconDrawable="@drawable/ic_baseline_cancel_white_24"
+                            app:endIconMode="clear_text"
                             app:boxBackgroundColor="@color/md_grey_100"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"

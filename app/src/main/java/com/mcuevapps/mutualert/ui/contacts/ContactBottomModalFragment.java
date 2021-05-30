@@ -21,7 +21,7 @@ import com.mcuevapps.mutualert.retrofit.response.AlertContact;
 
 public class ContactBottomModalFragment extends BottomSheetDialogFragment {
 
-    private static final String TAG = "ContactBottomModalFragment";
+    private static final String TAG = ContactBottomModalFragment.class.getSimpleName();
 
     private ContactViewModel contactViewModel;
     private AlertContact contact;

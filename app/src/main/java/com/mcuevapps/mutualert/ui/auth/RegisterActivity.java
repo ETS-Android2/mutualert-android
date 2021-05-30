@@ -8,7 +8,7 @@ import com.mcuevapps.mutualert.R;
 
 public class RegisterActivity extends AppCompatActivity {
 
-    private static final String TAG = "RegisterActivity";
+    private static final String TAG = RegisterActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

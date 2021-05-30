@@ -8,6 +8,9 @@ public class UserAuthSuccess {
     @SerializedName("token")
     @Expose
     private String token;
+    @SerializedName("alert")
+    @Expose
+    private boolean alert;
     @SerializedName("profile")
     @Expose
     private UserAuthSuccessProfile profile;
@@ -21,12 +24,14 @@ public class UserAuthSuccess {
 
     /**
      *
+     * @param alert
      * @param profile
      * @param token
      */
-    public UserAuthSuccess(String token, UserAuthSuccessProfile profile) {
+    public UserAuthSuccess(String token, boolean alert,UserAuthSuccessProfile profile) {
         super();
         this.token = token;
+        this.alert = alert;
         this.profile = profile;
     }
 
@@ -36,6 +41,14 @@ public class UserAuthSuccess {
 
     public void setToken(String token) {
         this.token = token;
+    }
+
+    public boolean getAlert() {
+        return alert;
+    }
+
+    public void setAlert(boolean alert) {
+        this.alert = alert;
     }
 
     public UserAuthSuccessProfile getProfile() {

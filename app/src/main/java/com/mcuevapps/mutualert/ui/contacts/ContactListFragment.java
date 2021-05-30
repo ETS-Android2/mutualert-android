@@ -23,7 +23,7 @@ import java.util.List;
 
 public class ContactListFragment extends Fragment {
 
-    private static final String TAG = "ContactListFragment";
+    private static final String TAG = ContactListFragment.class.getSimpleName();
 
     RecyclerView recyclerView;
     SwipeRefreshLayout swipeRefreshLayout;

@@ -20,6 +20,8 @@ import com.mcuevapps.mutualert.R;
 
 public class ContactRecyclerViewAdapter extends RecyclerView.Adapter<ContactRecyclerViewAdapter.ViewHolder> {
 
+    private static final String TAG = ContactRecyclerViewAdapter.class.getSimpleName();
+
     private Context ctx;
     private List<AlertContact> mValues;
     private ContactViewModel contactViewModel;

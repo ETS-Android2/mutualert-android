@@ -41,4 +41,6 @@
     <string name="permission_location">Esta aplicación necesita saber tu ubicación</string>
     <string name="ok">Ok</string>
     <string name="deny">Denegar</string>
+    <string name="emergency_notification_title">Emergencia Activada</string>
+    <string name="emergency_notification_text">Estamos enviando su ubicación</string>
 </resources>

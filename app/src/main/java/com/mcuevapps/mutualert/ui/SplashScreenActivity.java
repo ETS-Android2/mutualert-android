@@ -31,7 +31,7 @@ import retrofit2.Response;
 
 public class SplashScreenActivity extends AppCompatActivity implements PermissionListener {
 
-    private static final String TAG = "SplashScreenActivity";
+    private static final String TAG = SplashScreenActivity.class.getSimpleName();
 
     private ImageView iconImageView;
     private TextView nameTextView;

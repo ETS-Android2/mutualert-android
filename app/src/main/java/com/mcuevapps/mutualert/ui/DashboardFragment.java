@@ -19,7 +19,7 @@ import com.mcuevapps.mutualert.R;
 
 public class DashboardFragment extends Fragment {
 
-    private static final String TAG = "DashboardFragment";
+    private static final String TAG = DashboardFragment.class.getSimpleName();
 
     private View view;
 
