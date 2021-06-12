@@ -42,12 +42,7 @@ public class ContactListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
         contactViewModel = new ViewModelProvider(getActivity()).get(ContactViewModel.class);
-
-        if (getArguments() != null) {
-            //mColumnCount = getArguments().getInt(ARG_COLUMN_COUNT);
-        }
     }
 
     @Override

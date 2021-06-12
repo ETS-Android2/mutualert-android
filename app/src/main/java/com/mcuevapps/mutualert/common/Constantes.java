@@ -3,6 +3,7 @@ package com.mcuevapps.mutualert.common;
 public class Constantes {
 
     public static final String API_MUTUALERT_BASE_URL = "http://192.168.1.5/mutualert/public/index.php/";
+    public static final String API_MUTUALERT_SOCKET_URL = "http://192.168.1.5:3000";
 
     // Preferences
     public static final String PREF_TOKEN = "PREF_TOKEN";
@@ -40,4 +41,11 @@ public class Constantes {
 
     // Key
     public static final String KEY_CONTACT = "$CONTACT$";
+
+    // Socket
+    public static final String SOCKET_EVENT = "event";
+    public static final String SOCKET_DATA = "data";
+    public static final String EVENT_EMERGENCY_INIT = "EMERGENCY_INIT";
+    public static final String EVENT_EMERGENCY_UPDATE= "EMERGENCY_UPDATE";
+    public static final String EVENT_EMERGENCY_END = "EMERGENCY_END";
 }

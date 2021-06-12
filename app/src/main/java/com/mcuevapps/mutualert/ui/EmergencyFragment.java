@@ -29,7 +29,6 @@ public class EmergencyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_emergency, container, false);
-
         initUI();
         return view;
     }

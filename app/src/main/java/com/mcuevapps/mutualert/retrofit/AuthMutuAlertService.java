@@ -4,6 +4,7 @@ import com.mcuevapps.mutualert.retrofit.request.RequestAlertContact;
 import com.mcuevapps.mutualert.retrofit.request.RequestUserStateLocation;
 import com.mcuevapps.mutualert.retrofit.response.ResponseAlertContact;
 import com.mcuevapps.mutualert.retrofit.response.ResponseAlertContactList;
+import com.mcuevapps.mutualert.retrofit.response.ResponseAlertEmergencyList;
 import com.mcuevapps.mutualert.retrofit.response.ResponseSuccess;
 import com.mcuevapps.mutualert.retrofit.response.ResponseUserAuthSuccess;
 
@@ -46,4 +47,7 @@ public interface AuthMutuAlertService {
 
     @POST("alert/emergency/stop")
     Call<ResponseSuccess> stopEmergency();
+
+    @GET("alert/emergency/list")
+    Call<ResponseAlertEmergencyList> getAlertEmergencies();
 }

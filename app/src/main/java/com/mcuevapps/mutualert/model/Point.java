@@ -3,12 +3,35 @@ package com.mcuevapps.mutualert.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Point implements Parcelable {
-    double latitude;
-    double longitude;
-    float accuracy;
+import com.google.gson.annotations.Expose;
+import com.google.gson.annotations.SerializedName;
 
+public class Point implements Parcelable {
+    @SerializedName("latitude")
+    @Expose
+    private double latitude;
+    @SerializedName("longitude")
+    @Expose
+    private double longitude;
+    @SerializedName("accuracy")
+    @Expose
+    private float accuracy;
+
+    /**
+     * No args constructor for use in serialization
+     *
+     */
+    public Point() {
+    }
+
+    /**
+     *
+     * @param latitude
+     * @param longitude
+     * @param accuracy
+     */
     public Point(double latitude, double longitude, float accuracy) {
+        super();
         this.latitude = latitude;
         this.longitude = longitude;
         this.accuracy = accuracy;
