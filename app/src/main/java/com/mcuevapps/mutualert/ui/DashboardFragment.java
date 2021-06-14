@@ -127,15 +127,16 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
 
         LocationManager locationManager = (LocationManager) getActivity().getSystemService(Context.LOCATION_SERVICE);
         Location location = locationManager.getLastKnownLocation(locationManager.getBestProvider(criteria, false));
-        LatLng myLocation  = new LatLng(location.getLatitude(),location.getLongitude());
-
-        CameraPosition camera = new CameraPosition.Builder()
-                .target(myLocation)
-                .zoom(12)
-                .bearing(0)
-                .tilt(30)
-                .build();
-        gMap.animateCamera(CameraUpdateFactory.newCameraPosition(camera));
+        if(location!=null){
+            LatLng myLocation  = new LatLng(location.getLatitude(),location.getLongitude());
+            CameraPosition camera = new CameraPosition.Builder()
+                    .target(myLocation)
+                    .zoom(12)
+                    .bearing(0)
+                    .tilt(30)
+                    .build();
+            gMap.animateCamera(CameraUpdateFactory.newCameraPosition(camera));
+        }
     }
 
     public void listEmergencies(){

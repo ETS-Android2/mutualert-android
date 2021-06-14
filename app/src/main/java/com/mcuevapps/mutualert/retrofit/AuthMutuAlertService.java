@@ -48,6 +48,6 @@ public interface AuthMutuAlertService {
     @POST("alert/emergency/stop")
     Call<ResponseSuccess> stopEmergency();
 
-    @GET("alert/emergency/list")
+    @GET("alert/emergencies")
     Call<ResponseAlertEmergencyList> getAlertEmergencies();
 }
