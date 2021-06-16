@@ -28,6 +28,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
+import com.mcuevapps.mutualert.BuildConfig;
 import com.mcuevapps.mutualert.R;
 import com.mcuevapps.mutualert.common.Constantes;
 import com.mcuevapps.mutualert.common.SharedPreferencesManager;
@@ -64,18 +65,6 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
     private HashMap<Long, Marker> markerEmergencies;
 
     private Socket mSocket;
-    {
-        try {
-            String token = SharedPreferencesManager.getSomeStringValue(Constantes.PREF_TOKEN);
-            IO.Options options = new IO.Options();
-            options.forceNew = true;
-            options.reconnection = true;
-            options.query = "auth="+token;
-            mSocket = IO.socket(Constantes.API_MUTUALERT_SOCKET_URL, options);
-        } catch (URISyntaxException e) {
-            Log.e(TAG, "Error socket conection " + e);
-        }
-    }
 
     @Nullable
     @Override
@@ -97,6 +86,16 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
         alertEmergencies = new HashMap<>();
         markerEmergencies = new HashMap<>();
 
+        try {
+            String token = SharedPreferencesManager.getSomeStringValue(Constantes.PREF_TOKEN);
+            IO.Options options = new IO.Options();
+            options.forceNew = true;
+            options.reconnection = true;
+            options.query = "auth="+token;
+            mSocket = IO.socket(BuildConfig.SOCKET_URL, options);
+        } catch (URISyntaxException e) {
+            Log.e(TAG, "Error socket conection " + e);
+        }
         mSocket.on(Constantes.SOCKET_EVENT, onEvent);
         mSocket.connect();
     }
@@ -212,8 +211,9 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
 
     @Override
     public void onDestroy() {
+        super.onDestroy();
+
         mSocket.disconnect();
         mSocket.off(Constantes.SOCKET_EVENT, onEvent);
-        super.onDestroy();
     }
 }

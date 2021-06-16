@@ -1,6 +1,7 @@
 package com.mcuevapps.mutualert.retrofit;
 
 import com.google.gson.Gson;
+import com.mcuevapps.mutualert.BuildConfig;
 import com.mcuevapps.mutualert.R;
 import com.mcuevapps.mutualert.Service.UIService;
 import com.mcuevapps.mutualert.common.Constantes;
@@ -44,7 +45,7 @@ public class MutuAlertClient {
         OkHttpClient cliente = okHttpClientBuilder.build();
 
         retrofit = new Retrofit.Builder()
-                .baseUrl(Constantes.API_MUTUALERT_BASE_URL)
+                .baseUrl(BuildConfig.API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(cliente)
                 .build();

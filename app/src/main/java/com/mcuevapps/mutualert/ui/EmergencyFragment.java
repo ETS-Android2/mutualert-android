@@ -7,10 +7,10 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.mcuevapps.mutualert.R;
 import com.mcuevapps.mutualert.Service.UIService;
+import com.mcuevapps.mutualert.ui.home.HomeActivity;
 import com.ncorti.slidetoact.SlideToActView;
 
 public class EmergencyFragment extends Fragment {

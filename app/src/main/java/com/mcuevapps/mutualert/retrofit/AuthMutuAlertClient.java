@@ -1,5 +1,6 @@
 package com.mcuevapps.mutualert.retrofit;
 
+import com.mcuevapps.mutualert.BuildConfig;
 import com.mcuevapps.mutualert.common.Constantes;
 
 import okhttp3.OkHttpClient;
@@ -17,7 +18,7 @@ public class AuthMutuAlertClient {
         OkHttpClient cliente = okHttpClientBuilder.build();
 
         retrofit = new Retrofit.Builder()
-                .baseUrl(Constantes.API_MUTUALERT_BASE_URL)
+                .baseUrl(BuildConfig.API_URL)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(cliente)
                 .build();

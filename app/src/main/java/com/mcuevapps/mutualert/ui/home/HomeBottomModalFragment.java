@@ -1,4 +1,4 @@
-package com.mcuevapps.mutualert.ui;
+package com.mcuevapps.mutualert.ui.home;
 
 import android.os.Bundle;
 

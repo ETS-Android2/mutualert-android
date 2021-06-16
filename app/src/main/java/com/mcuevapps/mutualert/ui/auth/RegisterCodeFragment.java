@@ -6,6 +6,7 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 import android.os.Handler;
+import android.os.Looper;
 import android.text.Editable;
 import android.text.InputFilter;
 import android.text.TextWatcher;
@@ -96,6 +97,8 @@ public class RegisterCodeFragment extends Fragment implements View.OnClickListen
     }
 
     private void initUI() {
+        resendTimeLeft = 0;
+
         mAuth = FirebaseAuth.getInstance();
         mAuth.useAppLanguage();
 
@@ -151,17 +154,18 @@ public class RegisterCodeFragment extends Fragment implements View.OnClickListen
     @Override
     public void onStart() {
         super.onStart();
-
         //InputMethodManager imm = (InputMethodManager) getActivity().getSystemService(MyApp.getContext().INPUT_METHOD_SERVICE);
         //imm.showSoftInput(editTextCode, InputMethodManager.SHOW_IMPLICIT);
-
         resendCode();
     }
 
     public void resendCode(){
+        if(resendTimeLeft!=0){
+            return;
+        }
         UIService.ButtonDisable(UIService.BUTTON_RAISED, buttonResend);
         resendTimeLeft = Constantes.CODE_RESEND_TIME;
-
+        handler = new Handler(Looper.getMainLooper());
         runnable = new Runnable() {
             @Override
             public void run() {
@@ -186,9 +190,7 @@ public class RegisterCodeFragment extends Fragment implements View.OnClickListen
                 }
             }
         };
-
-        handler = new Handler();
-        handler.postDelayed(runnable,0000);
+        handler.postDelayed(runnable, 0000);
     }
 
     private void startPhoneNumberVerification() {

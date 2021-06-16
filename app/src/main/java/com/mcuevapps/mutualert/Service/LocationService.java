@@ -28,12 +28,11 @@ import com.mcuevapps.mutualert.R;
 import com.mcuevapps.mutualert.common.Constantes;
 import com.mcuevapps.mutualert.common.MyApp;
 import com.mcuevapps.mutualert.common.SharedPreferencesManager;
-import com.mcuevapps.mutualert.model.Point;
 import com.mcuevapps.mutualert.retrofit.AuthMutuAlertClient;
 import com.mcuevapps.mutualert.retrofit.AuthMutuAlertService;
 import com.mcuevapps.mutualert.retrofit.request.RequestUserStateLocation;
 import com.mcuevapps.mutualert.retrofit.response.ResponseSuccess;
-import com.mcuevapps.mutualert.ui.HomeActivity;
+import com.mcuevapps.mutualert.ui.home.HomeActivity;
 
 import retrofit2.Call;
 import retrofit2.Callback;

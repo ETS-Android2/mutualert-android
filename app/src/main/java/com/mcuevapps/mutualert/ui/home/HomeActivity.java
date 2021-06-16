@@ -1,4 +1,4 @@
-package com.mcuevapps.mutualert.ui;
+package com.mcuevapps.mutualert.ui.home;
 
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -26,6 +26,8 @@ import com.mcuevapps.mutualert.common.Constantes;
 import com.mcuevapps.mutualert.common.SharedPreferencesManager;
 import com.mcuevapps.mutualert.data.ContactViewModel;
 import com.mcuevapps.mutualert.retrofit.response.AlertContact;
+import com.mcuevapps.mutualert.ui.DashboardFragment;
+import com.mcuevapps.mutualert.ui.EmergencyFragment;
 import com.mcuevapps.mutualert.ui.contacts.ContactListFragment;
 
 import androidx.annotation.Nullable;
@@ -262,7 +264,7 @@ public class HomeActivity extends AppCompatActivity {
     public void changeFragment(Fragment fragment){
         getSupportFragmentManager()
                 .beginTransaction()
-                .add(R.id.frameLayout, fragment, fragment.getClass().toString())
+                .replace(R.id.frameLayout, fragment, fragment.getClass().toString())
                 .commit();
         currentFragment = fragment.getClass().toString();
     }
