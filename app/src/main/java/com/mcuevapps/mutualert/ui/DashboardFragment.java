@@ -204,8 +204,8 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
     @Override
     public void onInfoWindowClick(Marker marker) {
         Long id = (Long) marker.getTag();
-        Log.i(TAG, "Marker id: "+id);
         Intent intent = new Intent(getActivity(), WebViewActivity.class);
+        intent.putExtra("id", id);
         startActivity(intent);
     }
 
