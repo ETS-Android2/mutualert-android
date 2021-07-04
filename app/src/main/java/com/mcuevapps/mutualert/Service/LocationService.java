@@ -46,7 +46,7 @@ public class LocationService extends Service {
     private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
     private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2;
 
-    private static final int NOTIFICATION_ID = Integer.parseInt(Constantes.ID_ALERT+""+SharedPreferencesManager.getSomeIntValue(Constantes.PREF_USERID, 0));
+    private static final int NOTIFICATION_ID = Integer.parseInt(Constantes.NOTIFY_ID_ALERT +""+SharedPreferencesManager.getSomeIntValue(Constantes.PREF_USERID, 0));
 
     private static NotificationManager mNotificationManager;
 
@@ -159,7 +159,6 @@ public class LocationService extends Service {
                 .setOngoing(true)
                 .setPriority(Notification.PRIORITY_DEFAULT)
                 .setSmallIcon(R.drawable.icon_mutualert_notification)
-                .setTicker(MyApp.getInstance().getString(R.string.emergency_notification_message))
                 .build();
 
         return notification;

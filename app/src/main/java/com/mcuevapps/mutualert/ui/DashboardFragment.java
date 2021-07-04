@@ -182,13 +182,13 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
         try {
             String event = data.getString("event");
             if(event.equals(Constantes.EVENT_EMERGENCY_INIT) || event.equals(Constantes.EVENT_EMERGENCY_UPDATE)){
-                String dataStr = data.getJSONObject("data").toString();
+                String dataStr = data.getJSONObject(Constantes.SOCKET_DATA).toString();
                 AlertEmergency emergency = gson.fromJson(dataStr, AlertEmergency.class);
                 Long id = emergency.getId();
                 alertEmergencies.put(id, emergency);
                 createOrUpdateEmergencyMarker(id, emergency);
             }else if(event.equals(Constantes.EVENT_EMERGENCY_END)){
-                Long id = data.getLong("data");
+                Long id = data.getLong(Constantes.SOCKET_DATA);
                 if (alertEmergencies.containsKey(id)) {
                     alertEmergencies.remove(id);
                     Marker marker = markerEmergencies.get(id);

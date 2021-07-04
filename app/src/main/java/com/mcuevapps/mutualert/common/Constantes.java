@@ -27,15 +27,6 @@ public class Constantes {
     public static final int LOCATION_FASTEST_UPDATE_INTERVAL = LOCATION_UPDATE_INTERVAL / 2;
     public static final int LOCATION_MAX_WAIT_TIME = LOCATION_UPDATE_INTERVAL * 5;
 
-    // Notification
-    public static final String CHANNEL_ID_ALERT = "channel_alert";
-    public static final String CHANNEL_ID_EMERGENCY_MYCONTACT = "channel_emergency_mycontact";
-    public static final String CHANNEL_ID_EMERGENCY_SELFCONTACT = "channel_emergency_selfcontact";
-    public static final String CHANNEL_ID_EMERGENCY_DEFAULT = "channel_emergency_default";
-
-    public static final int ID_ALERT = 10;
-    public static final int ID_EMERGENCY = 20;
-
     // Http Code
     public static final int HTTP_UNAUTHORIZED = 401;
     public static final int HTTP_FORBIDDEN = 403;
@@ -50,10 +41,32 @@ public class Constantes {
 
     // Key
     public static final String KEY_CONTACT = "$CONTACT$";
+    public static final String KEY_NAME = "$NAME$";
 
     // Socket
     public static final String SOCKET_EVENT = "event";
     public static final String EVENT_EMERGENCY_INIT = "EMERGENCY_INIT";
     public static final String EVENT_EMERGENCY_UPDATE= "EMERGENCY_UPDATE";
     public static final String EVENT_EMERGENCY_END = "EMERGENCY_END";
+    public static final String SOCKET_DATA = "data";
+
+    // Notification
+    public static final String NOTIFY_EVENT = "event";
+    public static final String NOTIFY_EVENT_NOTIFY = "NOTIFY";
+    public static final String NOTIFY_EVENT_PROCESS = "PROCESS";
+    public static final String NOTIFY_TYPE = "type";
+    public static final String NOTIFY_TYPE_EMERGENCY_INIT = "EMERGENCY_INIT";
+    public static final String NOTIFY_TYPE_EMERGENCY_END = "EMERGENCY_END";
+    public static final String NOTIFY_DATA = "data";
+
+    public static final String NOTIFY_EMERGENCY_FROM_MYCONTACT = "mycontact";
+    public static final String NOTIFY_EMERGENCY_FROM_SELFCONTACT = "selfcontact";
+
+    public static final int NOTIFY_ID_ALERT = 10;
+    public static final int NOTIFY_ID_EMERGENCY = 20;
+
+    public static final String CHANNEL_ID_ALERT = "channel_alert";
+    public static final String CHANNEL_ID_EMERGENCY_MYCONTACT = "channel_emergency_mycontact";
+    public static final String CHANNEL_ID_EMERGENCY_SELFCONTACT = "channel_emergency_selfcontact";
+    public static final String CHANNEL_ID_EMERGENCY_DEFAULT = "channel_emergency_default";
 }

@@ -1,5 +1,6 @@
 package com.mcuevapps.mutualert.Service;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -13,9 +14,11 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+import com.google.gson.Gson;
 import com.mcuevapps.mutualert.R;
 import com.mcuevapps.mutualert.common.Constantes;
 import com.mcuevapps.mutualert.common.SharedPreferencesManager;
+import com.mcuevapps.mutualert.model.NotificationEmergency;
 import com.mcuevapps.mutualert.retrofit.AuthMutuAlertClient;
 import com.mcuevapps.mutualert.retrofit.AuthMutuAlertService;
 import com.mcuevapps.mutualert.retrofit.request.RequestUserSessionFcm;
@@ -24,6 +27,8 @@ import com.mcuevapps.mutualert.ui.home.HomeActivity;
 
 import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
+
+import java.util.Map;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -70,26 +75,20 @@ public class FirebaseCMService extends FirebaseMessagingService {
 
         // TODO(developer): Handle FCM messages here.
         // Not getting messages here? See why this may be: https://goo.gl/39bRNJ
-        Log.d(TAG, "From: " + remoteMessage.getFrom());
+        //Log.d(TAG, "From: " + remoteMessage.getFrom());
 
         // Check if message contains a data payload.
         if (remoteMessage.getData().size() > 0) {
-            Log.d(TAG, "Message data payload: " + remoteMessage.getData());
-
-            if (/* Check if data needs to be processed by long running job */ true) {
-                // For long-running tasks (10 seconds or more) use WorkManager.
-                scheduleJob();
-            } else {
-                // Handle message within 10 seconds
-                handleNow();
+            String event = remoteMessage.getData().get(Constantes.NOTIFY_EVENT);
+            if(event.equals(Constantes.NOTIFY_EVENT_NOTIFY)){
+                handleNow(remoteMessage.getData());
+            } else if(event.equals(Constantes.NOTIFY_EVENT_PROCESS)){
+                //scheduleJob();
             }
-
         }
 
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
-        }else {
-            sendNotification("Nuevo mensaje");
         }
     }
     // [END receive_message]
@@ -126,8 +125,38 @@ public class FirebaseCMService extends FirebaseMessagingService {
     /**
      * Handle time allotted to BroadcastReceivers.
      */
-    private void handleNow() {
-        Log.d(TAG, "Short lived task is done.");
+    private void handleNow(Map<String, String> payload) {
+        if(SharedPreferencesManager.getSomeBooleanValue(Constantes.PREF_ALERT_APP, false)){
+            return;
+        }
+
+        String type = payload.get(Constantes.NOTIFY_TYPE);
+        if(type.equals(Constantes.NOTIFY_TYPE_EMERGENCY_INIT)){
+            Gson gson = new Gson();
+            NotificationEmergency emergency = gson.fromJson(payload.get(Constantes.NOTIFY_DATA), NotificationEmergency.class);
+
+            String channelId;
+            String title;
+            String message;
+            if(emergency.getFrom().equals(Constantes.NOTIFY_EMERGENCY_FROM_MYCONTACT)){
+                channelId = Constantes.CHANNEL_ID_EMERGENCY_MYCONTACT;
+                title = getString(R.string.notify_title_emergency_mycontact);
+                message = getString(R.string.notify_message_emergency_mycontact);
+            } else if(emergency.getFrom().equals(Constantes.NOTIFY_EMERGENCY_FROM_SELFCONTACT)){
+                channelId = Constantes.CHANNEL_ID_EMERGENCY_SELFCONTACT;
+                title = getString(R.string.notify_title_emergency_selfcontact);
+                message = getString(R.string.notify_message_emergency_selfcontact);
+            } else {
+                channelId = Constantes.CHANNEL_ID_EMERGENCY_DEFAULT;
+                title = getString(R.string.notify_title_emergency_default);
+                message = getString(R.string.notify_message_emergency_default);
+            }
+            message = message.replace(Constantes.KEY_NAME, emergency.getNombres());
+            sendNotification(channelId, title, message, Integer.parseInt(Constantes.NOTIFY_ID_EMERGENCY +""+emergency.getId()));
+        } else if (type.equals(Constantes.NOTIFY_TYPE_EMERGENCY_END)){
+            int id = Integer.parseInt(payload.get(Constantes.NOTIFY_DATA));
+            cancelNotification(Integer.parseInt(Constantes.NOTIFY_ID_EMERGENCY +""+id));
+        }
     }
 
     /**
@@ -162,37 +191,58 @@ public class FirebaseCMService extends FirebaseMessagingService {
     /**
      * Create and show a simple notification containing the received FCM message.
      *
-     * @param messageBody FCM message body received.
+     * @param channelId FCM message body received
+     * @param title FCM message body received
+     * @param message FCM message body received
+     *
      */
-    private void sendNotification(String messageBody) {
+    private void sendNotification(String channelId, String title, String message, int notificationId) {
+        String channelName;
+        int priority;
+        int importance;
+        if(channelId.equals(Constantes.CHANNEL_ID_EMERGENCY_MYCONTACT)){
+            channelName = getString(R.string.channel_name_emergency_mycontact);
+            priority = Notification.PRIORITY_MAX;
+            importance = NotificationManager.IMPORTANCE_MAX;
+        } else if(channelId.equals(Constantes.CHANNEL_ID_EMERGENCY_SELFCONTACT)){
+            channelName = getString(R.string.channel_name_emergency_selfcontact);
+            priority = Notification.PRIORITY_HIGH;
+            importance = NotificationManager.IMPORTANCE_HIGH;
+        } else {
+            channelName = getString(R.string.channel_name_emergency_default);
+            priority = Notification.PRIORITY_DEFAULT;
+            importance = NotificationManager.IMPORTANCE_DEFAULT;
+        }
+
         Intent intent = new Intent(this, HomeActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
                 PendingIntent.FLAG_ONE_SHOT);
 
-        //String channelId = getString(R.string.default_notification_channel_id);
-        String channelId = "canal";
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(this, channelId)
-                        .setSmallIcon(R.drawable.icon_mutualert_notification)
-                        .setContentTitle("Mensage desde fcm")
-                        .setContentText(messageBody)
                         .setAutoCancel(true)
-                        .setSound(defaultSoundUri)
-                        .setContentIntent(pendingIntent);
+                        .setContentTitle(title)
+                        .setContentText(message)
+                        .setContentIntent(pendingIntent)
+                        .setPriority(priority)
+                        .setSmallIcon(R.drawable.icon_mutualert_notification)
+                        .setSound(defaultSoundUri);
 
-        NotificationManager notificationManager =
-                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        // Since android Oreo notification channel is needed.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel channel = new NotificationChannel(channelId,
-                    "Channel human readable title",
-                    NotificationManager.IMPORTANCE_DEFAULT);
+                    channelName, importance);
             notificationManager.createNotificationChannel(channel);
         }
 
-        notificationManager.notify(0, notificationBuilder.build());
+        notificationManager.notify(notificationId, notificationBuilder.build());
+    }
+
+    private void cancelNotification(int notificationId){
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.cancel(notificationId);
     }
 }

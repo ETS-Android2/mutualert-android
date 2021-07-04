@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">MutuAlert</string>
-    <!--<string name="default_notification_channel_id">MutuAlert</string>-->
     <string name="phone">Teléfono</string>
     <string name="password">Contraseña</string>
     <string name="login">Iniciar Sesión</string>
@@ -52,8 +51,13 @@
     <string name="emergency_stop_success">Emergencia finalizada</string>
     <string name="refresh">Actualizar</string>
     <string name="channel_name_alert">Notificación cuando pido ayuda</string>
-    <string name="channel_name_emergency_mycontact">Notificación cuando pido ayuda</string>
-    <string name="channel_name_emergency_selfcontact">Notificación cuando pido ayuda</string>
-    <string name="channel_name_emergency_default">Notificación cuando pido ayuda</string>
-
+    <string name="channel_name_emergency_mycontact">Notificación cuando mi contacto pide ayuda</string>
+    <string name="channel_name_emergency_selfcontact">Notificación de ayuda cuando yo soy el contacto</string>
+    <string name="channel_name_emergency_default">Notificación de un desconocido pidiendo ayuda</string>
+    <string name="notify_title_emergency_mycontact">Ayuda a tu contacto</string>
+    <string name="notify_title_emergency_selfcontact">Ayuda a tu amigo</string>
+    <string name="notify_title_emergency_default">Ayuda a un usuario</string>
+    <string name="notify_message_emergency_mycontact">Tu contacto \"$NAME$\" necesita ayuda</string>
+    <string name="notify_message_emergency_selfcontact">\"$NAME$\" te tiene de contacto y necesita ayuda</string>
+    <string name="notify_message_emergency_default">\"$NAME$\" necesita ayuda</string>
 </resources>
