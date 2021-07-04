@@ -159,7 +159,8 @@ public class RegisterInfoFragment extends Fragment implements View.OnClickListen
                 if( response.isSuccessful() ){
                     SharedPreferencesManager.setSomeStringValue(Constantes.PREF_USERNAME, phone);
                     Utils.saveDataLogin(response.body().getData());
-                    Utils.goToHome();
+                    Utils.enableFCM();
+                    Utils.goToHome(false);
                     getActivity().finish();
                 }
             }

@@ -110,7 +110,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                         SharedPreferencesManager.setSomeBooleanValue(Constantes.PREF_ALERT_APP, true);
                     }
                     Utils.saveDataLogin(response.body().getData());
-                    Utils.goToHome();
+                    Utils.enableFCM();
+                    Utils.goToHome(false);
                     LoginActivity.this.finish();
                 }
             }

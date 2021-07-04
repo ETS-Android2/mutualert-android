@@ -23,6 +23,7 @@ public class AuthInterceptor implements Interceptor{
         Response response = chain.proceed(request);
         try {
             if (response.code()==Constantes.HTTP_UNAUTHORIZED || response.code()==Constantes.HTTP_FORBIDDEN ) {
+                Utils.disableFCM();
                 Utils.removeDataLogin();
                 Utils.goToLogin();
             } else if ( !response.isSuccessful() && response.code()<Constantes.HTTP_SERVER_ERROR ) {

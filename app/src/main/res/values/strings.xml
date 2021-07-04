@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">MutuAlert</string>
+    <!--<string name="default_notification_channel_id">MutuAlert</string>-->
     <string name="phone">Teléfono</string>
     <string name="password">Contraseña</string>
     <string name="login">Iniciar Sesión</string>
@@ -50,4 +51,9 @@
     <string name="emergency_dialog_cancel">No</string>
     <string name="emergency_stop_success">Emergencia finalizada</string>
     <string name="refresh">Actualizar</string>
+    <string name="channel_name_alert">Notificación cuando pido ayuda</string>
+    <string name="channel_name_emergency_mycontact">Notificación cuando pido ayuda</string>
+    <string name="channel_name_emergency_selfcontact">Notificación cuando pido ayuda</string>
+    <string name="channel_name_emergency_default">Notificación cuando pido ayuda</string>
+
 </resources>

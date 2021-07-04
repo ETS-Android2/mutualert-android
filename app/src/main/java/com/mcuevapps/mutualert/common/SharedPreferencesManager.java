@@ -26,12 +26,22 @@ public class SharedPreferencesManager {
         editor.commit();
     }
 
+    public static void setSomeIntValue(String dataLabel, int dataValue) {
+        SharedPreferences.Editor editor = getSharedPreferences().edit();
+        editor.putInt(dataLabel, dataValue);
+        editor.commit();
+    }
+
     public static String getSomeStringValue(String dataLabel) {
         return getSharedPreferences().getString(dataLabel, null);
     }
 
     public static boolean getSomeBooleanValue(String dataLabel, boolean defValue) {
         return getSharedPreferences().getBoolean(dataLabel, defValue);
+    }
+
+    public static int getSomeIntValue(String dataLabel, int defValue) {
+        return getSharedPreferences().getInt(dataLabel, defValue);
     }
 
     public static void deleteSomeValue(String dataLabel) {

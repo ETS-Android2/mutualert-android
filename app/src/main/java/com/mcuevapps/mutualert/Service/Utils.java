@@ -3,15 +3,18 @@ package com.mcuevapps.mutualert.Service;
 import android.content.Intent;
 import android.text.TextUtils;
 
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.mcuevapps.mutualert.common.Constantes;
 import com.mcuevapps.mutualert.common.MyApp;
 import com.mcuevapps.mutualert.common.SharedPreferencesManager;
 import com.mcuevapps.mutualert.retrofit.response.UserAuthSuccess;
+import com.mcuevapps.mutualert.ui.WebViewActivity;
 import com.mcuevapps.mutualert.ui.home.HomeActivity;
 import com.mcuevapps.mutualert.ui.auth.LoginActivity;
 
 public class Utils {
     public static void saveDataLogin(UserAuthSuccess data){
+        SharedPreferencesManager.setSomeIntValue(Constantes.PREF_USERID, data.getUserId());
         SharedPreferencesManager.setSomeStringValue(Constantes.PREF_TOKEN, data.getToken());
         SharedPreferencesManager.setSomeBooleanValue(Constantes.PREF_ALERT_API, data.getAlert());
         SharedPreferencesManager.setSomeStringValue(Constantes.PREF_APELLIDOPAT, data.getProfile().getApepat());
@@ -35,8 +38,9 @@ public class Utils {
         MyApp.getContext().startActivity(intent);
     }
 
-    public static void goToHome(){
+    public static void goToHome(boolean fromSplash){
         Intent intent = new Intent(MyApp.getContext(), HomeActivity.class);
+        intent.putExtra(Constantes.ARG_FROM_SPLASH, fromSplash);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         MyApp.getContext().startActivity(intent);
     }
@@ -51,5 +55,14 @@ public class Utils {
             return false;
 
         return true;
+    }
+
+    public static void enableFCM(){
+        FirebaseMessaging.getInstance().setAutoInitEnabled(true);
+    }
+
+    public static void disableFCM(){
+        FirebaseMessaging.getInstance().setAutoInitEnabled(false);
+        FirebaseMessaging.getInstance().deleteToken();
     }
 }

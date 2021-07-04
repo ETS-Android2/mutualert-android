@@ -56,6 +56,7 @@ public class HomeBottomModalFragment extends BottomSheetDialogFragment {
     }
 
     public void logout(){
+        Utils.disableFCM();
         Utils.removeDataLogin();
         Utils.goToLogin();
         ((HomeActivity) getActivity()).removeLocationUpdates();

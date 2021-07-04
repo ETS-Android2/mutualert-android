@@ -15,9 +15,12 @@ import android.widget.TextView;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.AppBarLayout;
 import com.google.android.material.bottomappbar.BottomAppBar;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.messaging.FirebaseMessaging;
 import com.mcuevapps.mutualert.R;
 import com.mcuevapps.mutualert.Service.LocationBroadcastReceiver;
 import com.mcuevapps.mutualert.Service.LocationService;
@@ -25,11 +28,16 @@ import com.mcuevapps.mutualert.Service.UIService;
 import com.mcuevapps.mutualert.common.Constantes;
 import com.mcuevapps.mutualert.common.SharedPreferencesManager;
 import com.mcuevapps.mutualert.data.ContactViewModel;
+import com.mcuevapps.mutualert.retrofit.AuthMutuAlertClient;
+import com.mcuevapps.mutualert.retrofit.AuthMutuAlertService;
+import com.mcuevapps.mutualert.retrofit.request.RequestUserSessionFcm;
 import com.mcuevapps.mutualert.retrofit.response.AlertContact;
+import com.mcuevapps.mutualert.retrofit.response.ResponseSuccess;
 import com.mcuevapps.mutualert.ui.DashboardFragment;
 import com.mcuevapps.mutualert.ui.EmergencyFragment;
 import com.mcuevapps.mutualert.ui.contacts.ContactListFragment;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -39,9 +47,15 @@ import androidx.lifecycle.ViewModelProvider;
 
 import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
 public class HomeActivity extends AppCompatActivity {
 
     private static final String TAG = HomeActivity.class.getSimpleName();
+
+    private boolean fromSplash = false;
 
     private boolean emergency;
     private TextView textViewToolbar;
@@ -105,6 +119,13 @@ public class HomeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            fromSplash = extras.getBoolean(Constantes.ARG_FROM_SPLASH);
+        }
+
+        verifyFCMToken();
 
         if (savedInstanceState == null) {
             initUI();
@@ -281,5 +302,16 @@ public class HomeActivity extends AppCompatActivity {
             mBound = false;
         }
         super.onStop();
+    }
+
+    public void verifyFCMToken(){
+        if(fromSplash && !SharedPreferencesManager.getSomeBooleanValue(Constantes.PREF_FCM_TOKEN, false)){
+            FirebaseMessaging.getInstance().getToken().addOnCompleteListener(task -> {
+                if (!task.isSuccessful()) {
+                    Log.w(TAG, "Fetching FCM registration token failed", task.getException());
+                    return;
+                }
+            });
+        }
     }
 }

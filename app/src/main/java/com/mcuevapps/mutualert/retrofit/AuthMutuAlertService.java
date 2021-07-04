@@ -1,6 +1,7 @@
 package com.mcuevapps.mutualert.retrofit;
 
 import com.mcuevapps.mutualert.retrofit.request.RequestAlertContact;
+import com.mcuevapps.mutualert.retrofit.request.RequestUserSessionFcm;
 import com.mcuevapps.mutualert.retrofit.request.RequestUserStateLocation;
 import com.mcuevapps.mutualert.retrofit.response.ResponseAlertContact;
 import com.mcuevapps.mutualert.retrofit.response.ResponseAlertContactList;
@@ -20,6 +21,10 @@ public interface AuthMutuAlertService {
     /** User Auth **/
     @GET("user/auth/token")
     Call<ResponseUserAuthSuccess> token();
+
+    /** User Session **/
+    @POST("user/session/fcm")
+    Call<ResponseSuccess> fcmSession(@Body RequestUserSessionFcm requestUserSessionFcm);
 
     /** User State **/
     @POST("user/state/location")

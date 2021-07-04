@@ -42,23 +42,19 @@ public class LocationService extends Service {
 
     private static final String TAG = LocationService.class.getSimpleName();
 
-    private static final String PACKAGE_NAME = "com.mcuevapps.mutualert.Service";
-    public static final String EXTRA_STARTED_FROM_BOOT = PACKAGE_NAME +".started_from_boot";
+    public static final String EXTRA_STARTED_FROM_BOOT = "com.mcuevapps.mutualert.Service.started_from_boot";
     private static final long UPDATE_INTERVAL_IN_MILLISECONDS = 10000;
     private static final long FASTEST_UPDATE_INTERVAL_IN_MILLISECONDS = UPDATE_INTERVAL_IN_MILLISECONDS / 2;
 
+    private static final int NOTIFICATION_ID = Integer.parseInt(Constantes.ID_ALERT+""+SharedPreferencesManager.getSomeIntValue(Constantes.PREF_USERID, 0));
 
-    private static final String CHANNEL_ID = "channel_01";
-    private static final String CHANNEL_NAME = "LocationService Channel 01";
-    private static final int NOTIFICATION_ID = 12345678;
+    private static NotificationManager mNotificationManager;
 
     private FusedLocationProviderClient mFusedLocationClient;
     private LocationCallback mLocationCallback;
     private Location mLocation;
     private LocationRequest mLocationRequest;
     private Handler mServiceHandler;
-    private NotificationManager mNotificationManager;
-
 
     private final IBinder mBinder = new LocalBinder();
     private boolean mChangingConfiguration = false;
@@ -77,30 +73,25 @@ public class LocationService extends Service {
             }
         };
 
+        createNotificationManager();
+
         createLocationRequest();
 
         HandlerThread handlerThread = new HandlerThread(TAG);
         handlerThread.start();
         mServiceHandler = new Handler(handlerThread.getLooper());
-        mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            CharSequence name = getString(R.string.app_name);
-            NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, name, NotificationManager.IMPORTANCE_DEFAULT);
-            mNotificationManager.createNotificationChannel(mChannel);
-        }
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i(TAG, "Service onStartCommand");
 
-        boolean startedFromBoot = intent.getBooleanExtra(EXTRA_STARTED_FROM_BOOT,
-                false);
-        if (startedFromBoot && SharedPreferencesManager.getSomeBooleanValue(Constantes.PREF_ALERT_APP, false)) {
-            createNotificationManager();
+        boolean startedFromBoot = intent.getBooleanExtra(EXTRA_STARTED_FROM_BOOT, false);
+        if(startedFromBoot && SharedPreferencesManager.getSomeBooleanValue(Constantes.PREF_ALERT_APP, false)){
+            requestLocationUpdates();
             startForeground(NOTIFICATION_ID, getNotification());
         }
+
         return START_NOT_STICKY;
     }
 
@@ -147,11 +138,12 @@ public class LocationService extends Service {
     }
 
     private void createNotificationManager(){
-        NotificationManager  mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        if(mNotificationManager!=null) return;
+
+        mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel( CHANNEL_ID, CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationChannel channel = new NotificationChannel(Constantes.CHANNEL_ID_ALERT, getString(R.string.channel_name_alert), NotificationManager.IMPORTANCE_DEFAULT);
             mNotificationManager.createNotificationChannel(channel);
-            new NotificationCompat.Builder(this, CHANNEL_ID);
         }
     }
 
@@ -160,7 +152,7 @@ public class LocationService extends Service {
         PendingIntent pendingIntent = PendingIntent.getActivity(this,
                 0, notificationIntent, 0);
 
-        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+        Notification notification = new NotificationCompat.Builder(this, Constantes.CHANNEL_ID_ALERT)
                 .setContentTitle(MyApp.getInstance().getString(R.string.emergency_notification_title))
                 .setContentText(MyApp.getInstance().getString(R.string.emergency_notification_message))
                 .setContentIntent(pendingIntent)
@@ -182,9 +174,11 @@ public class LocationService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "Service in onBind()");
+
         if(SharedPreferencesManager.getSomeBooleanValue(Constantes.PREF_ALERT_APP, false)){
-            requestLocationUpdates();
+            stopForeground(true);
         }
+
         return mBinder;
     }
 
@@ -201,7 +195,6 @@ public class LocationService extends Service {
         Log.i(TAG, "Service last client unbound from service");
         if (!mChangingConfiguration && SharedPreferencesManager.getSomeBooleanValue(Constantes.PREF_ALERT_APP, false)) {
             Log.i(TAG, "Service starting foreground service");
-            createNotificationManager();
             startForeground(NOTIFICATION_ID, getNotification());
         }
         return true;
@@ -210,6 +203,9 @@ public class LocationService extends Service {
     public void requestLocationUpdates() {
         Log.i(TAG, "Service requesting location updates");
         SharedPreferencesManager.setSomeBooleanValue(Constantes.PREF_ALERT_APP, true);
+
+        mNotificationManager.cancelAll();
+
         startService(new Intent(getApplicationContext(), LocationService.class));
         try {
             mFusedLocationClient.requestLocationUpdates(mLocationRequest,

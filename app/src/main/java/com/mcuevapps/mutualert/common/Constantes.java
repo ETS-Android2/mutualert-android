@@ -6,12 +6,14 @@ public class Constantes {
     public static final String PREF_TOKEN = "PREF_TOKEN";
     public static final String PREF_ALERT_API = "PREF_ALERT_API";
     public static final String PREF_USERNAME = "PREF_USERNAME";
+    public static final String PREF_USERID = "PREF_USERID";
     public static final String PREF_APELLIDOPAT = "PREF_APELLIDOPAT";
     public static final String PREF_APELLIDOMAT = "PREF_APELLIDOMAT";
     public static final String PREF_NOMBRES = "PREF_NOMBRES";
     public static final String PREF_EMAIL = "PREF_EMAIL";
     public static final String PREF_AVATAR = "PREF_AVATAR";
     public static final String PREF_ALERT_APP = "PREF_ALERT_APP";
+    public static final String PREF_FCM_TOKEN = "PREF_FCM_TOKEN";
 
     // CONFIG
     public static final int PHONE_LENGTH = 9;
@@ -23,7 +25,16 @@ public class Constantes {
 
     public static final int LOCATION_UPDATE_INTERVAL = 60 * 1000;
     public static final int LOCATION_FASTEST_UPDATE_INTERVAL = LOCATION_UPDATE_INTERVAL / 2;
-    public static final int LOCATION_MAX_WAIT_TIME = LOCATION_UPDATE_INTERVAL * 5;;
+    public static final int LOCATION_MAX_WAIT_TIME = LOCATION_UPDATE_INTERVAL * 5;
+
+    // Notification
+    public static final String CHANNEL_ID_ALERT = "channel_alert";
+    public static final String CHANNEL_ID_EMERGENCY_MYCONTACT = "channel_emergency_mycontact";
+    public static final String CHANNEL_ID_EMERGENCY_SELFCONTACT = "channel_emergency_selfcontact";
+    public static final String CHANNEL_ID_EMERGENCY_DEFAULT = "channel_emergency_default";
+
+    public static final int ID_ALERT = 10;
+    public static final int ID_EMERGENCY = 20;
 
     // Http Code
     public static final int HTTP_UNAUTHORIZED = 401;
@@ -35,6 +46,7 @@ public class Constantes {
     public static final String ARG_PHONE = "PHONE";
     public static final String ARG_CODE = "CODE";
     public static final String ARG_ALERT_CONTACT = "ALERT_CONTACT";
+    public static final String ARG_FROM_SPLASH = "ARG_FROM_SPLASH";
 
     // Key
     public static final String KEY_CONTACT = "$CONTACT$";

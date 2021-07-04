@@ -189,7 +189,7 @@ public class SplashScreenActivity extends AppCompatActivity implements Permissio
         }
 
         if(existToken){
-            Utils.goToHome();
+            Utils.goToHome(true);
         } else {
             Utils.goToLogin();
         }
