@@ -132,17 +132,19 @@ public class FirebaseCMService extends FirebaseMessagingService {
 
         String type = payload.get(Constantes.NOTIFY_TYPE);
         if(type.equals(Constantes.NOTIFY_TYPE_EMERGENCY_INIT)){
+            String origin = payload.get(Constantes.NOTIFY_ORIGIN);
+
             Gson gson = new Gson();
             NotificationEmergency emergency = gson.fromJson(payload.get(Constantes.NOTIFY_DATA), NotificationEmergency.class);
 
             String channelId;
             String title;
             String message;
-            if(emergency.getFrom().equals(Constantes.NOTIFY_EMERGENCY_FROM_MYCONTACT)){
+            if(origin.equals(Constantes.NOTIFY_EMERGENCY_FROM_MYCONTACT)){
                 channelId = Constantes.CHANNEL_ID_EMERGENCY_MYCONTACT;
                 title = getString(R.string.notify_title_emergency_mycontact);
                 message = getString(R.string.notify_message_emergency_mycontact);
-            } else if(emergency.getFrom().equals(Constantes.NOTIFY_EMERGENCY_FROM_SELFCONTACT)){
+            } else if(origin.equals(Constantes.NOTIFY_EMERGENCY_FROM_SELFCONTACT)){
                 channelId = Constantes.CHANNEL_ID_EMERGENCY_SELFCONTACT;
                 title = getString(R.string.notify_title_emergency_selfcontact);
                 message = getString(R.string.notify_message_emergency_selfcontact);

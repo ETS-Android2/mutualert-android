@@ -55,6 +55,7 @@ public class Constantes {
     public static final String NOTIFY_EVENT_NOTIFY = "NOTIFY";
     public static final String NOTIFY_EVENT_PROCESS = "PROCESS";
     public static final String NOTIFY_TYPE = "type";
+    public static final String NOTIFY_ORIGIN = "origin";
     public static final String NOTIFY_TYPE_EMERGENCY_INIT = "EMERGENCY_INIT";
     public static final String NOTIFY_TYPE_EMERGENCY_END = "EMERGENCY_END";
     public static final String NOTIFY_DATA = "data";

@@ -8,9 +8,6 @@ public class NotificationEmergency {
     @SerializedName("id")
     @Expose
     private Integer id;
-    @SerializedName("from")
-    @Expose
-    private String from;
     @SerializedName("nombres")
     @Expose
     private String nombres;
@@ -32,14 +29,12 @@ public class NotificationEmergency {
      *
      * @param apepat
      * @param apemat
-     * @param from
      * @param id
      * @param nombres
      */
-    public NotificationEmergency(Integer id, String from, String nombres, String apepat, String apemat) {
+    public NotificationEmergency(Integer id, String nombres, String apepat, String apemat) {
         super();
         this.id = id;
-        this.from = from;
         this.nombres = nombres;
         this.apepat = apepat;
         this.apemat = apemat;
@@ -51,14 +46,6 @@ public class NotificationEmergency {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public String getFrom() {
-        return from;
-    }
-
-    public void setFrom(String from) {
-        this.from = from;
     }
 
     public String getNombres() {
