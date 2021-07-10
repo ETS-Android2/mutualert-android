@@ -13,5 +13,5 @@
 .externalNativeBuild
 .cxx
 local.properties
-app/src/debug/*
-app/src/release/*
+/app/src/debug/*
+/app/src/release/*
