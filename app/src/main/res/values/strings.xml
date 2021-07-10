@@ -60,4 +60,5 @@
     <string name="notify_message_emergency_mycontact">Tu contacto \"$NAME$\" necesita ayuda</string>
     <string name="notify_message_emergency_selfcontact">\"$NAME$\" te tiene de contacto y necesita ayuda</string>
     <string name="notify_message_emergency_default">\"$NAME$\" necesita ayuda</string>
+    <string name="marker_emergency_snippet">más información</string>
 </resources>

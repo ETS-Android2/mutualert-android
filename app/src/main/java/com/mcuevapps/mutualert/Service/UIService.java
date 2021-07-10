@@ -1,7 +1,6 @@
 package com.mcuevapps.mutualert.Service;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Handler;
 import android.os.Looper;
@@ -15,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
 
 import com.mcuevapps.mutualert.R;
 import com.mcuevapps.mutualert.common.MyApp;
@@ -128,7 +128,7 @@ public class UIService {
 
         ImageView imageView = dialog.findViewById(android.R.id.icon);
         if (imageView != null) {
-            imageView.setColorFilter(Color.parseColor("#E4CC40"), android.graphics.PorterDuff.Mode.SRC_IN);
+            imageView.setColorFilter(ContextCompat.getColor(context, R.color.md_warning_color));
         }
     }
 

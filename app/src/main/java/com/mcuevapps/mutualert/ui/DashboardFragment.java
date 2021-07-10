@@ -117,6 +117,7 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) { }
         /* *********** */
         gMap = googleMap;
+        gMap.setInfoWindowAdapter(new InfoWindowAdapter(getContext()));
         gMap.setOnInfoWindowClickListener(this);
         gMap.setMinZoomPreference(10);
         gMap.setMaxZoomPreference(16);
@@ -167,8 +168,8 @@ public class DashboardFragment extends Fragment implements OnMapReadyCallback, G
         }else{
             marker = gMap.addMarker(
                     new MarkerOptions().position(position)
-                            .title(emergency.getPhone())
-                            .snippet(emergency.getNombres()+" "+emergency.getApepat()+" "+emergency.getApemat())
+                            .title(emergency.getNombres()+" "+emergency.getApepat()+" "+emergency.getApemat())
+                            .snippet(getString(R.string.marker_emergency_snippet))
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_sos))
             );
             marker.setTag(id);
