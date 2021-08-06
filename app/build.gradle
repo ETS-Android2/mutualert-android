@@ -18,12 +18,12 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField "String", "API_URL", '"http://192.168.1.3/mutualert/public/index.php/"'
-            buildConfigField "String", "SOCKET_URL", '"http://192.168.1.3:3000/"'
+            buildConfigField "String", "API_URL", '"http://192.168.1.38/mutualert/public/index.php/"'
+            buildConfigField "String", "SOCKET_URL", '"http://192.168.1.38:3000/"'
         }
         release {
             buildConfigField "String", "API_URL", '"http://api.mutualert.com/"'
-            buildConfigField "String", "SOCKET_URL", '"http://mutualert.com/"'
+            buildConfigField "String", "SOCKET_URL", '"http://www.mutualert.com/"'
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
